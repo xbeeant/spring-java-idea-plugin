@@ -1,0 +1,39 @@
+<idea-plugin>
+    <id>com.xstudio.com.xstudio.plugin.idea</id>
+    <name><![CDATA[spring & java tools]]></name>
+    <vendor email="huangxb0512@gmail.com" url="https://beeant0512.github.io">Beeant</vendor>
+
+    <description><![CDATA[
+    <p>some spring & java plugin</p>
+    <ul>
+    <li>spring request toolkit</li>
+    </ul>
+    ]]></description>
+
+    <change-notes>
+        <![CDATA[
+        Initial release of the plugin. <br />
+        support:
+        <ul>
+          <li>spring request toolkit, just show the request list. </li>
+        </ul>
+    ]]>
+    </change-notes>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <project-components>
+        <component>
+            <implementation-class>com.xstudio.plugin.idea.sj.components.SpringRestServicesComponent</implementation-class>
+        </component>
+    </project-components>
+    <extensions defaultExtensionNs="com.intellij">
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+
+    </actions>
+</idea-plugin>

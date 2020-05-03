@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.4.18'
+}
+
+group 'com.xstudio'
+version '1.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+    version '2020.1'
+    version "IU-191.6707.61"
+    patchPluginXml {
+        sinceBuild "191.6707.61"
+        untilBuild "193.*"
+    }
+    type "IU"
+}
+
+patchPluginXml {
+    changeNotes """
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>"""
+}
+
+tasks.withType(GroovyCompile) {
+    configure(groovyOptions.forkOptions) {
+        memoryMaximumSize = '1g'
+        jvmArgs = ['-XX:MaxPermSize=512m', '-Xms512m', '-Xmx1g']
+    }
+}

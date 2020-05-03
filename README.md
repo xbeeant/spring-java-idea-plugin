@@ -1,2 +1,6 @@
-# spring-java-idea-plugin
-some spring &amp; java idea plugin
+### spring & java 一些IDEA插件
+
+* spring request
+![示例](./request.gif)
+
+
