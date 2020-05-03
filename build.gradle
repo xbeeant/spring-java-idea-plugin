@@ -27,12 +27,6 @@ intellij {
     type "IU"
 }
 
-patchPluginXml {
-    changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
-}
-
 tasks.withType(GroovyCompile) {
     configure(groovyOptions.forkOptions) {
         memoryMaximumSize = '1g'
