@@ -33,3 +33,5 @@ tasks.withType(GroovyCompile) {
         jvmArgs = ['-XX:MaxPermSize=512m', '-Xms512m', '-Xmx1g']
     }
 }
+
+buildSearchableOptions.enabled = false
