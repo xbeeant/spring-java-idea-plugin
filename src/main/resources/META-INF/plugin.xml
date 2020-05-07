@@ -12,6 +12,11 @@
 
     <change-notes>
         <![CDATA[
+        1.0.1:
+        <ul>
+          <li>add reload button</li>
+        </ul>
+
         Initial release of the plugin. <br />
         support:
         <ul>
