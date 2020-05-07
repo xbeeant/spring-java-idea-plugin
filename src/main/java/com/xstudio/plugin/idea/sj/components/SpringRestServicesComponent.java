@@ -110,13 +110,13 @@ public class SpringRestServicesComponent implements ProjectComponent {
         }
 
         // 搜索框
-        restListForm.getRequestSearch().addKeyListener(new KeyAdapter(){
+        restListForm.getRequestSearch().addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 String value = restListForm.getRequestSearch().getText();
                 listModel.clear();
                 for (RequestPath item : requests) {
-                    if (item.getPath().contains(value)){
+                    if (item.getPath().contains(value)) {
                         listModel.addElement(item);
                     }
                 }
@@ -144,7 +144,9 @@ public class SpringRestServicesComponent implements ProjectComponent {
                 if (e.getValueIsAdjusting()) {
                     JList<RequestPath> item = (JList<RequestPath>) e.getSource();
                     RequestPath selectedValue = item.getSelectedValue();
-                    NavigationUtil.activateFileWithPsiElement(selectedValue.getPsiMethod(), true);
+                    if (null != selectedValue) {
+                        NavigationUtil.activateFileWithPsiElement(selectedValue.getPsiMethod(), true);
+                    }
                     item.clearSelection();
                 }
             }
