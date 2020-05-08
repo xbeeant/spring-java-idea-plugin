@@ -14,7 +14,9 @@ public class RequestPath {
 
     private PsiMethod psiMethod;
 
-    public RequestPath(String controllerPath, String methodPath, String method, PsiMethod psiMethod) {
+    private String moduleName;
+
+    public RequestPath(String controllerPath, String methodPath, String method, PsiMethod psiMethod, String moduleName) {
         String prePath = controllerPath;
         if (controllerPath.endsWith("/")) {
             prePath = controllerPath.substring(0, controllerPath.length() - 1);
@@ -28,6 +30,7 @@ public class RequestPath {
         this.path = prePath + path;
         this.method = method;
         this.psiMethod = psiMethod;
+        this.moduleName = moduleName;
     }
 
     public String getPath() {
@@ -40,5 +43,9 @@ public class RequestPath {
 
     public PsiElement getPsiMethod() {
         return psiMethod;
+    }
+
+    public String getModuleName() {
+        return moduleName;
     }
 }
