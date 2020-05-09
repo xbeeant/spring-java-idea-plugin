@@ -19,10 +19,7 @@ import com.xstudio.plugin.idea.sj.spring.Mapping;
 import com.xstudio.plugin.idea.sj.spring.RequestPath;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * // TODO description
@@ -72,15 +69,17 @@ public class RequestPathUtil {
             // 获取各方法的mapping
             PsiMethod[] psiMethods = ((PsiClassImpl) parent).getMethods();
             for (PsiMethod psiMethod : psiMethods) {
-                List<Mapping> methods = Annotations.getMethods();
-                for (Mapping mapping : methods) {
+                List<Mapping> mappings = Annotations.getMethods();
+                for (Mapping mapping : mappings) {
                     PsiAnnotation annotation = psiMethod.getAnnotation(mapping.getQualifiedName());
                     List<String> path = getPath(annotation, mapping);
                     if (null != path) {
                         for (String parentRequest : parentRequestMapping) {
                             for (String s : path) {
-                                String method = getMethod(annotation, mapping);
-                                requestPaths.add(new RequestPath(parentRequest, s, method, psiMethod, module.getName()));
+                                List<String> methods = getMethod(annotation, mapping);
+                                for (String method : methods) {
+                                    requestPaths.add(new RequestPath(parentRequest, s, method, psiMethod, module.getName()));
+                                }
                             }
                         }
                     }
@@ -91,21 +90,35 @@ public class RequestPathUtil {
         return requestPaths;
     }
 
-    private static String getMethod(PsiAnnotation annotation, Mapping mapping) {
+    private static List<String> getMethod(PsiAnnotation annotation, Mapping mapping) {
+        List<String> methods = new ArrayList<>();
         PsiAnnotationMemberValue memberValue = annotation.findDeclaredAttributeValue("method");
         if (null != memberValue) {
-            return ((PsiReferenceExpressionImpl) memberValue).getQualifiedName().substring(14).toLowerCase();
+            if (memberValue instanceof PsiReferenceExpressionImpl) {
+                String method = ((PsiReferenceExpressionImpl) memberValue).getQualifiedName().substring(14).toLowerCase();
+                methods.add(method);
+                return methods;
+            } else if (memberValue instanceof PsiArrayInitializerMemberValueImpl) {
+                PsiAnnotationMemberValue[] values = ((PsiArrayInitializerMemberValueImpl) memberValue).getInitializers();
+                for (PsiAnnotationMemberValue member : values) {
+                    String method = ((PsiReferenceExpressionImpl) member).getQualifiedName().substring(14).toLowerCase();
+                    methods.add(method);
+                }
+                return methods;
+            }
         }
-        return mapping.getMethod();
+
+        methods.add(mapping.getMethod());
+        return methods;
     }
 
-    private static RestListForm restListForm;
+    private static Map<String, RestListForm> restListForms = new HashMap<>();
 
     public static RestListForm getRestListForm(Project project) {
-        if (null == restListForm) {
-            RequestPathUtil.restListForm = new RestListForm(project);
+        if (!restListForms.containsKey(project.getLocationHash())) {
+            RequestPathUtil.restListForms.put(getProjectUniqueCode(project), new RestListForm(project));
         }
-        return restListForm;
+        return restListForms.get(getProjectUniqueCode(project));
     }
 
     private static List<String> getPath(PsiAnnotation psiAnnotation, Mapping mapping) {
@@ -134,5 +147,13 @@ public class RequestPathUtil {
             listModel.addElement(request);
         }
         return listModel;
+    }
+
+    public static void removeRestListForm(Project project) {
+        restListForms.remove(getProjectUniqueCode(project));
+    }
+
+    private static String getProjectUniqueCode(Project project) {
+        return project.getLocationHash();
     }
 }

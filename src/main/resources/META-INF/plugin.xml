@@ -12,16 +12,10 @@
 
     <change-notes>
         <![CDATA[
-        1.0.1:
+        1.0.2:
         <ul>
-          <li>add reload button</li>
-          <li>fixed bugs</li>
-        </ul>
-
-        Initial release of the plugin. <br />
-        support:
-        <ul>
-          <li>spring request toolkit, just show the request list. </li>
+          <li>fix when open two or more project</li>
+          <li>fix when method have more than one value</li>
         </ul>
     ]]>
     </change-notes>

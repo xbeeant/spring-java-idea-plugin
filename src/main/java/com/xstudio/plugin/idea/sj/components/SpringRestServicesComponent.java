@@ -104,7 +104,7 @@ public class SpringRestServicesComponent implements ProjectComponent {
 
     @Override
     public void projectClosed() {
-
+        RequestPathUtil.removeRestListForm(project);
     }
 
     @Override
