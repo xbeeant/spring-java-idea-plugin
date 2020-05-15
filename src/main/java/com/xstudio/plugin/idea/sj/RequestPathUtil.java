@@ -3,13 +3,11 @@ package com.xstudio.plugin.idea.sj;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.index.JavaAnnotationIndex;
 import com.intellij.psi.impl.source.PsiClassImpl;
 import com.intellij.psi.impl.source.tree.java.PsiArrayInitializerMemberValueImpl;
+import com.intellij.psi.impl.source.tree.java.PsiBinaryExpressionImpl;
 import com.intellij.psi.impl.source.tree.java.PsiLiteralExpressionImpl;
 import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -133,7 +131,13 @@ public class RequestPathUtil {
                 PsiAnnotationMemberValue[] values = ((PsiArrayInitializerMemberValueImpl) value).getInitializers();
                 StringBuilder sb = new StringBuilder();
                 for (PsiAnnotationMemberValue path : values) {
-                    paths.add((String) ((PsiLiteralExpressionImpl) path).getValue());
+                    if (path instanceof PsiBinaryExpressionImpl) {
+                        // todo get the PsiBinaryExpressionImpl const value
+                        // PsiReferenceExpression ?
+                        paths.add(((PsiBinaryExpressionImpl) path).getText());
+                    } else {
+                        paths.add((String) ((PsiLiteralExpressionImpl) path).getValue());
+                    }
                 }
                 return paths;
             }

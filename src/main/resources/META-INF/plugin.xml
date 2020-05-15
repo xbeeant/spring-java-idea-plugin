@@ -12,10 +12,9 @@
 
     <change-notes>
         <![CDATA[
-        1.0.2:
+        1.0.3:
         <ul>
-          <li>fix when open two or more project</li>
-          <li>fix when method have more than one value</li>
+          <li>fix PsiBinaryExpression type method value</li>
         </ul>
     ]]>
     </change-notes>
