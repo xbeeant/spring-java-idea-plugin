@@ -1,5 +1,6 @@
 package com.xstudio.plugin.idea.sj;
 
+import com.intellij.lang.jvm.annotation.*;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
@@ -7,8 +8,6 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.index.JavaAnnotationIndex;
 import com.intellij.psi.impl.source.PsiClassImpl;
 import com.intellij.psi.impl.source.tree.java.PsiArrayInitializerMemberValueImpl;
-import com.intellij.psi.impl.source.tree.java.PsiBinaryExpressionImpl;
-import com.intellij.psi.impl.source.tree.java.PsiLiteralExpressionImpl;
 import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.xstudio.plugin.idea.sj.components.RestListForm;
@@ -17,6 +16,7 @@ import com.xstudio.plugin.idea.sj.spring.Mapping;
 import com.xstudio.plugin.idea.sj.spring.RequestPath;
 
 import javax.swing.*;
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -26,6 +26,8 @@ import java.util.*;
  * @version 2020/5/7
  */
 public class RequestPathUtil {
+
+    private static Map<String, RestListForm> restListForms = new HashMap<>();
 
     public static List<RequestPath> getRequestPath(Project project) {
         List<RequestPath> requestPaths = new ArrayList<>();
@@ -110,8 +112,6 @@ public class RequestPathUtil {
         return methods;
     }
 
-    private static Map<String, RestListForm> restListForms = new HashMap<>();
-
     public static RestListForm getRestListForm(Project project) {
         if (!restListForms.containsKey(project.getLocationHash())) {
             RequestPathUtil.restListForms.put(getProjectUniqueCode(project), new RestListForm(project));
@@ -119,28 +119,73 @@ public class RequestPathUtil {
         return restListForms.get(getProjectUniqueCode(project));
     }
 
+    /**
+     * 获取属性值
+     *
+     * @param attributeValue Psi属性
+     * @return {Object | List}
+     */
+    public static Object getAttributeValue(JvmAnnotationAttributeValue attributeValue) {
+        if (attributeValue == null) {
+            return null;
+        }
+        if (attributeValue instanceof JvmAnnotationConstantValue) {
+            return ((JvmAnnotationConstantValue) attributeValue).getConstantValue();
+        } else if (attributeValue instanceof JvmAnnotationEnumFieldValue) {
+            return ((JvmAnnotationEnumFieldValue) attributeValue).getFieldName();
+        } else if (attributeValue instanceof JvmAnnotationArrayValue) {
+            List<JvmAnnotationAttributeValue> values = ((JvmAnnotationArrayValue) attributeValue).getValues();
+            List<Object> list = new ArrayList<>(values.size());
+            for (JvmAnnotationAttributeValue value : values) {
+                Object o = getAttributeValue(value);
+                if (o != null) {
+                    list.add(o);
+                } else {
+                    // 如果是jar包里的JvmAnnotationConstantValue则无法正常获取值
+                    try {
+                        Class<? extends JvmAnnotationAttributeValue> clazz = value.getClass();
+                        Field myElement = clazz.getSuperclass().getDeclaredField("myElement");
+                        myElement.setAccessible(true);
+                        Object elObj = myElement.get(value);
+                        if (elObj instanceof PsiExpression) {
+                            PsiExpression expression = (PsiExpression) elObj;
+                            list.add(expression.getText());
+                        }
+                    } catch (Exception ignore) {
+                    }
+                }
+            }
+            return list;
+        } else if (attributeValue instanceof JvmAnnotationClassValue) {
+            return ((JvmAnnotationClassValue) attributeValue).getQualifiedName();
+        }
+        return null;
+    }
+
     private static List<String> getPath(PsiAnnotation psiAnnotation, Mapping mapping) {
         List<String> paths = new ArrayList<>();
         if (null != psiAnnotation) {
-            PsiAnnotationMemberValue value = psiAnnotation.findDeclaredAttributeValue("value");
-            if (value instanceof PsiLiteralExpressionImpl) {
-                Object path = ((PsiLiteralExpressionImpl) value).getValue();
-                paths.add(String.valueOf(path));
-                return paths;
-            } else if (value instanceof PsiArrayInitializerMemberValueImpl) {
-                PsiAnnotationMemberValue[] values = ((PsiArrayInitializerMemberValueImpl) value).getInitializers();
-                StringBuilder sb = new StringBuilder();
-                for (PsiAnnotationMemberValue path : values) {
-                    if (path instanceof PsiBinaryExpressionImpl) {
-                        // todo get the PsiBinaryExpressionImpl const value
-                        // PsiReferenceExpression ?
-                        paths.add(((PsiBinaryExpressionImpl) path).getText());
-                    } else {
-                        paths.add((String) ((PsiLiteralExpressionImpl) path).getValue());
+            List<JvmAnnotationAttribute> attributes = psiAnnotation.getAttributes();
+            for (JvmAnnotationAttribute attribute : attributes) {
+                String name = attribute.getAttributeName();
+                if (name.equals("value")) {
+                    Object attributeValue = getAttributeValue(attribute.getAttributeValue());
+                    if (attributeValue instanceof String) {
+                        paths.add((String) attributeValue);
+                    } else if (attributeValue instanceof List) {
+                        //noinspection unchecked,rawtypes
+                        List<String> list = (List) attributeValue;
+                        for (String item : list) {
+                            if (item != null) {
+                                item = item.substring(item.lastIndexOf(".") + 1);
+                                paths.add(item);
+                            }
+                        }
                     }
                 }
-                return paths;
             }
+
+            return paths;
         }
         return null;
     }
