@@ -12,9 +12,9 @@
 
     <change-notes>
         <![CDATA[
-        1.0.3:
+        1.0.4:
         <ul>
-          <li>fix PsiBinaryExpression type method value</li>
+          <li>Support right mouse button to copy URL</li>
         </ul>
     ]]>
     </change-notes>
