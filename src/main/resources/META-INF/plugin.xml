@@ -34,6 +34,9 @@
 
     <actions>
         <!-- Add your actions here -->
-
+        <action id="SerializeGenerator" class="com.xstudio.plugin.idea.sj.serialize.SerializeGenerator"
+                text="Generator SerialVersionUID" description="Generator A SerialVersionUID">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
     </actions>
 </idea-plugin>

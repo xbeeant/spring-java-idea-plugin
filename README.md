@@ -2,5 +2,5 @@
 
 * spring request
 ![示例](./docs/request.gif)
-
+* Generate SerialVersionUID for Serializable class 
 
