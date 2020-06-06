@@ -58,7 +58,8 @@ public class SpringRestServicesComponent implements ProjectComponent {
             public void keyReleased(KeyEvent e) {
                 String value = restListForm.getRequestSearch().getText();
                 List<RequestPath> requests = RequestPathUtil.getRequestPath(project);
-                requests.removeIf(item -> !item.getPath().contains(value));
+                // 模糊搜索
+                requests.removeIf(item -> !item.getPath().toLowerCase().contains(value.toLowerCase()));
 
                 DefaultListModel<RequestPath> listModel = RequestPathUtil.getListModel(requests);
                 jbList.setModel(listModel);
