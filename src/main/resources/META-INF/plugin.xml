@@ -7,14 +7,17 @@
     <p>some spring & java plugin</p>
     <ul>
     <li>spring request toolkit</li>
+    <li>Generate SerialVersionUID for java class</li>
     </ul>
-    ]]></description>
+    ]]>
+    </description>
 
     <change-notes>
         <![CDATA[
-        1.0.4:
+        1.0.5:
         <ul>
-          <li>Support right mouse button to copy URL</li>
+          <li>Support fuzzy search</li>
+          <li>Support Generate Serialize</li>
         </ul>
     ]]>
     </change-notes>
