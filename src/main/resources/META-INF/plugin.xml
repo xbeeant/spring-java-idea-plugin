@@ -14,9 +14,9 @@
 
     <change-notes>
         <![CDATA[
-        1.0.5:
+        1.0.6:
         <ul>
-          <li>Support fuzzy search</li>
+          <li>Support 2020.2 RC</li>
           <li>Support Generate Serialize</li>
         </ul>
     ]]>
