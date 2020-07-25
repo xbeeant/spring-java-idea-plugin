@@ -22,7 +22,7 @@ intellij {
     version "IU-191.6707.61"
     patchPluginXml {
         sinceBuild "191.6707.61"
-        untilBuild "*"
+        untilBuild "202.*"
     }
     type "IU"
 }
