@@ -21,6 +21,7 @@ public class Annotations {
             add(new Mapping("get", "GetMapping", "org.springframework.web.bind.annotation.GetMapping"));
             add(new Mapping("post", "PostMapping", "org.springframework.web.bind.annotation.PostMapping"));
             add(new Mapping("put", "PutMapping", "org.springframework.web.bind.annotation.PutMapping"));
+            add(new Mapping("patch", "PatchMapping", "org.springframework.web.bind.annotation.PatchMapping"));
         }
     };
 
