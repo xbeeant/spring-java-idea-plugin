@@ -50,14 +50,14 @@ public class SpringRestServicesComponent implements ProjectComponent {
         JBList<RequestPath> jbList = restListForm.getJbList();
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
 
-        List<RequestPath> requestPaths = RequestPathUtil.getRequestPath(project);
+        List<RequestPath> requestPaths = RequestPathUtil.findAllRequestInProject(project);
 
         // 搜索框
         restListForm.getRequestSearch().addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 String value = restListForm.getRequestSearch().getText();
-                List<RequestPath> requests = RequestPathUtil.getRequestPath(project);
+                List<RequestPath> requests = RequestPathUtil.findAllRequestInProject(project);
                 // 模糊搜索
                 requests.removeIf(item -> !item.getPath().toLowerCase().contains(value.toLowerCase()));
 

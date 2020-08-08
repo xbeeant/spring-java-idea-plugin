@@ -28,7 +28,7 @@ public class RestListForm {
         reloadBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List<RequestPath> requestPath = RequestPathUtil.getRequestPath(project);
+                List<RequestPath> requestPath = RequestPathUtil.findAllRequestInProject(project);
                 RestListForm restListForm = RequestPathUtil.getRestListForm(project);
                 restListForm.getJbList().setModel(RequestPathUtil.getListModel(requestPath));
             }

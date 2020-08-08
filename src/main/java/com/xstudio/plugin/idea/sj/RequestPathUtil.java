@@ -6,7 +6,6 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.index.JavaAnnotationIndex;
-import com.intellij.psi.impl.source.PsiClassImpl;
 import com.intellij.psi.impl.source.tree.java.PsiArrayInitializerMemberValueImpl;
 import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -14,6 +13,7 @@ import com.xstudio.plugin.idea.sj.components.RestListForm;
 import com.xstudio.plugin.idea.sj.spring.Annotations;
 import com.xstudio.plugin.idea.sj.spring.Mapping;
 import com.xstudio.plugin.idea.sj.spring.RequestPath;
+import org.apache.commons.collections.CollectionUtils;
 
 import javax.swing.*;
 import java.lang.reflect.Field;
@@ -29,57 +29,78 @@ public class RequestPathUtil {
 
     private static Map<String, RestListForm> restListForms = new HashMap<>();
 
-    public static List<RequestPath> getRequestPath(Project project) {
+    public static List<RequestPath> findAllRequestInProject(Project project) {
         List<RequestPath> requestPaths = new ArrayList<>();
         ModuleManager moduleManager = ModuleManager.getInstance(project);
         Module[] modules = moduleManager.getSortedModules();
         // 获取 request list
         for (Module module : modules) {
-            GlobalSearchScope moduleScope = GlobalSearchScope.moduleScope(module);
-            // search all spring @RestController annotation in module
-            Collection<PsiAnnotation> psiAnnotations = JavaAnnotationIndex.getInstance().get("RestController", project, moduleScope);
-            requestPaths.addAll(getRequestPaths(psiAnnotations, module));
-
-            // search all spring @Controller annotation in module
-            psiAnnotations = JavaAnnotationIndex.getInstance().get("Controller", project, moduleScope);
-            requestPaths.addAll(getRequestPaths(psiAnnotations, module));
+            requestPaths.addAll(findAllRequestInModule(project, module));
         }
+        return requestPaths;
+    }
+
+    public static List<RequestPath> findAllRequestInModule(Project project, Module module) {
+        GlobalSearchScope moduleScope = GlobalSearchScope.moduleScope(module);
+        // search all spring @RestController annotation in module
+        Collection<PsiAnnotation> psiAnnotations = JavaAnnotationIndex.getInstance().get("RestController", project, moduleScope);
+        List<RequestPath> requestPaths = getRequestPaths(psiAnnotations, module);
+
+        // search all spring @Controller annotation in module
+        psiAnnotations = JavaAnnotationIndex.getInstance().get("Controller", project, moduleScope);
+        requestPaths.addAll(getRequestPaths(psiAnnotations, module));
         return requestPaths;
     }
 
     private static List<RequestPath> getRequestPaths(Collection<PsiAnnotation> psiAnnotations, Module module) {
         List<RequestPath> requestPaths = new ArrayList<>();
         for (PsiAnnotation psiAnnotation : psiAnnotations) {
-            PsiElement psiElement = psiAnnotation.getParent();
-            PsiElement parent = psiElement.getParent();
-            // 获取 class 的requestMapping路径
-            List<String> parentRequestMapping = null;
+            PsiModifierList psiModifierList = (PsiModifierList) psiAnnotation.getParent();
+            PsiElement psiElement = psiModifierList.getParent();
+            PsiClass psiClass = (PsiClass) psiElement;
+
+            requestPaths.addAll(getRequestPaths(psiClass, module, new ArrayList<>()));
+        }
+
+        return requestPaths;
+    }
+
+    private static List<RequestPath> getRequestPaths(PsiClass psiClass, Module module, List<String> parentRequestMapping) {
+        List<RequestPath> requestPaths = new ArrayList<>();
+        // 获取 class 的requestMapping路径
+        if (CollectionUtils.isEmpty(parentRequestMapping)) {
             for (Mapping mapping : Annotations.getClasz()) {
-                PsiAnnotation requestMappingAnnotation = ((PsiClassImpl) parent).getAnnotation(mapping.getQualifiedName());
+                PsiAnnotation requestMappingAnnotation = psiClass.getAnnotation(mapping.getQualifiedName());
                 parentRequestMapping = getPath(requestMappingAnnotation, mapping);
-                if (null != parentRequestMapping) {
+                if (!CollectionUtils.isEmpty(parentRequestMapping)) {
                     break;
                 }
             }
-
-            if (null == parentRequestMapping) {
+            if (CollectionUtils.isEmpty(parentRequestMapping)) {
                 parentRequestMapping = Collections.singletonList("");
             }
+        }
 
-            // 获取各方法的mapping
-            PsiMethod[] psiMethods = ((PsiClassImpl) parent).getMethods();
-            for (PsiMethod psiMethod : psiMethods) {
-                List<Mapping> mappings = Annotations.getMethods();
-                for (Mapping mapping : mappings) {
-                    PsiAnnotation annotation = psiMethod.getAnnotation(mapping.getQualifiedName());
-                    List<String> path = getPath(annotation, mapping);
-                    if (null != path) {
-                        for (String parentRequest : parentRequestMapping) {
-                            for (String s : path) {
-                                List<String> methods = getMethod(annotation, mapping);
-                                for (String method : methods) {
-                                    requestPaths.add(new RequestPath(parentRequest, s, method, psiMethod, module.getName()));
-                                }
+        PsiClass superClass = psiClass.getSuperClass();
+        if (null != superClass) {
+            if (!Objects.equals(superClass.getQualifiedName(), "java.lang.Object")) {
+                requestPaths.addAll(getRequestPaths(superClass, module, parentRequestMapping));
+            }
+        }
+
+        // 获取各方法的mapping
+        PsiMethod[] psiMethods = psiClass.getMethods();
+        for (PsiMethod psiMethod : psiMethods) {
+            List<Mapping> mappings = Annotations.getMethods();
+            for (Mapping mapping : mappings) {
+                PsiAnnotation annotation = psiMethod.getAnnotation(mapping.getQualifiedName());
+                List<String> path = getPath(annotation, mapping);
+                if (!CollectionUtils.isEmpty(path)) {
+                    for (String parentRequest : parentRequestMapping) {
+                        for (String s : path) {
+                            List<String> methods = getMethod(annotation, mapping);
+                            for (String method : methods) {
+                                requestPaths.add(new RequestPath(parentRequest, s, method, psiMethod, module.getName()));
                             }
                         }
                     }
@@ -187,7 +208,7 @@ public class RequestPathUtil {
 
             return paths;
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public static DefaultListModel<RequestPath> getListModel(List<RequestPath> requests) {
