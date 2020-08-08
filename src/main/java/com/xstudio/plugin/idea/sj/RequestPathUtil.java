@@ -94,13 +94,22 @@ public class RequestPathUtil {
             List<Mapping> mappings = Annotations.getMethods();
             for (Mapping mapping : mappings) {
                 PsiAnnotation annotation = psiMethod.getAnnotation(mapping.getQualifiedName());
-                List<String> path = getPath(annotation, mapping);
-                if (!CollectionUtils.isEmpty(path)) {
-                    for (String parentRequest : parentRequestMapping) {
-                        for (String s : path) {
+                if (null != annotation) {
+                    List<String> path = getPath(annotation, mapping);
+                    if (!CollectionUtils.isEmpty(path)) {
+                        for (String parentRequest : parentRequestMapping) {
+                            for (String s : path) {
+                                List<String> methods = getMethod(annotation, mapping);
+                                for (String method : methods) {
+                                    requestPaths.add(new RequestPath(parentRequest, s, method, psiMethod, module.getName()));
+                                }
+                            }
+                        }
+                    } else {
+                        for (String parentRequest : parentRequestMapping) {
                             List<String> methods = getMethod(annotation, mapping);
                             for (String method : methods) {
-                                requestPaths.add(new RequestPath(parentRequest, s, method, psiMethod, module.getName()));
+                                requestPaths.add(new RequestPath(parentRequest, "", method, psiMethod, module.getName()));
                             }
                         }
                     }

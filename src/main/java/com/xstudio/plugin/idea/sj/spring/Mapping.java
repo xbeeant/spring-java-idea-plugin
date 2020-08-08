@@ -5,11 +5,11 @@ package com.xstudio.plugin.idea.sj.spring;
  * @version 2020/5/2
  */
 public class Mapping {
-    private String method;
+    private final String method;
 
-    private String name;
+    private final String name;
 
-    private String qualifiedName;
+    private final String qualifiedName;
 
     public Mapping(String method, String name, String qualifiedName) {
         this.method = method;

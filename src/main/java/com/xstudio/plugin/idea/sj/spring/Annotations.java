@@ -8,13 +8,13 @@ import java.util.List;
  * @version 2020/5/2
  */
 public class Annotations {
-    private static List<Mapping> clasz = new ArrayList<Mapping>() {
+    private static final List<Mapping> clasz = new ArrayList<Mapping>() {
         {
             add(new Mapping("request", "RequestMapping", "org.springframework.web.bind.annotation.RequestMapping"));
         }
     };
 
-    private static List<Mapping> methods = new ArrayList<Mapping>() {
+    private static final List<Mapping> methods = new ArrayList<Mapping>() {
         {
             add(new Mapping("request", "RequestMapping", "org.springframework.web.bind.annotation.RequestMapping"));
             add(new Mapping("delete", "DeleteMapping", "org.springframework.web.bind.annotation.DeleteMapping"));

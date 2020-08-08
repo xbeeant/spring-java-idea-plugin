@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.xstudio'
-version '1.0.6'
+version '1.0.7'
 
 repositories {
     mavenCentral()
@@ -19,12 +19,13 @@ dependencies {
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version '2020.1'
-    version "IU-191.6707.61"
+    version "IU-202.6397.94"
     patchPluginXml {
         sinceBuild "191.6707.61"
         untilBuild "202.*"
     }
     type "IU"
+    plugins = ['java']
 }
 
 tasks.withType(GroovyCompile) {

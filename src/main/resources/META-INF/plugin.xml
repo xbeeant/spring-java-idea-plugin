@@ -1,6 +1,6 @@
 <idea-plugin>
     <id>com.xstudio.com.xstudio.plugin.idea</id>
-    <name><![CDATA[spring & java tools]]></name>
+    <name><![CDATA[Spring & Java Tools]]></name>
     <vendor email="huangxb0512@gmail.com" url="https://beeant0512.github.io">Beeant</vendor>
 
     <description><![CDATA[
@@ -14,10 +14,10 @@
 
     <change-notes>
         <![CDATA[
-        1.0.6:
+        1.0.7:
         <ul>
-          <li>Support 2020.2 RC</li>
-          <li>Support Generate Serialize</li>
+          <li>fix bugs</li>
+          <li>Support super calss mappings</li>
         </ul>
     ]]>
     </change-notes>
@@ -25,7 +25,7 @@
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.modules.java</depends>
+    <depends>com.intellij.java</depends>
 
     <project-components>
         <component>
