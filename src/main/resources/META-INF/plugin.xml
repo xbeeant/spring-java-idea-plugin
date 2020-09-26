@@ -8,16 +8,17 @@
     <ul>
     <li>spring request toolkit</li>
     <li>Generate SerialVersionUID for java class</li>
+    <li>Generate getter setter method with field comment</li>
     </ul>
     ]]>
     </description>
 
     <change-notes>
         <![CDATA[
-        1.0.7:
+        1.0.8:
         <ul>
-          <li>fix bugs</li>
-          <li>Support super calss mappings</li>
+          <li>feat: generate getter & setter method with comments( code from <a href="https://plugins.jetbrains.com/plugin/11292-generategsdoc">generateGSDoc</a>)</li>
+          <li>feat: support IDEA 203.*</li>
         </ul>
     ]]>
     </change-notes>
@@ -33,10 +34,26 @@
         </component>
     </project-components>
     <extensions defaultExtensionNs="com.intellij">
+        <applicationService
+                serviceImplementation="com.xstudio.plugin.idea.sj.settings.TemplatePersistentConfiguration" />
+        <applicationConfigurable groupId="tools" displayName="Getter Setter Template" id="Xstudio.Plugin.SpringJava"
+                                 instance="com.xstudio.plugin.idea.sj.settings.TemplateConfigurable"/>
     </extensions>
 
     <actions>
         <!-- Add your actions here -->
+        <action id="GenerateGetSetAction" class="com.xstudio.plugin.idea.sj.settings.GenerateGetSetAction"
+                text="Getter and Setter With Comment">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
+        <action id="GenerateGetAction" class="com.xstudio.plugin.idea.sj.settings.GenerateGetAction"
+                text="Getter With Comment">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
+        <action id="GenerateSetAction" class="com.xstudio.plugin.idea.sj.settings.GenerateSetAction"
+                text="Setter With Comment">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
         <action id="SerializeGenerator" class="com.xstudio.plugin.idea.sj.serialize.SerializeGenerator"
                 text="Generator SerialVersionUID" description="Generator A SerialVersionUID">
             <add-to-group group-id="GenerateGroup" anchor="last"/>

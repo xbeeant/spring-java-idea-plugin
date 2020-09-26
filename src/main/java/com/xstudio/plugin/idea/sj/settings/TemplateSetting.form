@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.xstudio.plugin.idea.sj.settings.TemplateSetting">
+  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="2424" height="17151"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="6f85a" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Set:"/>
+        </properties>
+      </component>
+      <vspacer id="8898a">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+      <grid id="9ba2a" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="7d07b" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Description:"/>
+            </properties>
+          </component>
+          <hspacer id="892a2">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+          <component id="4011f" class="javax.swing.JTextArea" binding="inThisTemplateYouTextArea" default-binding="true">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="50"/>
+              </grid>
+            </constraints>
+            <properties>
+              <lineWrap value="true"/>
+              <text value="In this template, you can specify a code fragment to be included into file templates (Templates tab) with the help of the #parse directive. One template can be shared by several file templates. Along with static text, code and comments, you can also use predefined variables that will then be expanded like macros into the corresponding values. &#10;Predefined variables will take the following values:&#10;${PACKAGE_NAME}&#10;&#10;the comment of field &#10;${FILED_COMMENT}&#10;&#10;the field name&#10;${FIELD_NAME}&#10;&#10;name of the package in which the new file is created&#10;${USER}&#10; &#10;current user system login name&#10;${DATE}&#10; &#10;current system date&#10;${TIME}&#10; &#10;current system time&#10;${YEAR}&#10; &#10;current year&#10;${MONTH}&#10; &#10;current month&#10;${MONTH_NAME_SHORT}&#10; &#10;first 3 letters of the current month name. Example: Jan, Feb, etc.&#10;${MONTH_NAME_FULL}&#10; &#10;full name of the current month. Example: January, February, etc.&#10;${DAY}&#10; &#10;current day of the month&#10;${DAY_NAME_SHORT}&#10; &#10;first 3 letters of the current day name. Example: Mon, Tue, etc.&#10;${DAY_NAME_FULL}"/>
+              <wrapStyleWord value="true"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <component id="d4f27" class="javax.swing.JTextArea" binding="setterTemplate">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <rows value="4"/>
+          <text value="/**&#10; * set field ${FIELD_COMMENT} &#10; *&#10; * @param ${FIELD_NAME} ${FIELD_COMMENT}&#10; */"/>
+        </properties>
+      </component>
+      <component id="bff36" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Get:"/>
+        </properties>
+      </component>
+      <component id="b4821" class="javax.swing.JTextArea" binding="getterTemplate">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <rows value="4"/>
+          <text value="/**&#10; * get field ${FIELD_COMMENT}&#10; *  &#10; * @return ${FIELD_NAME} ${FIELD_COMMENT}&#10; */"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>

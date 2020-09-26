@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.xstudio'
-version '1.0.7'
+version '1.0.8'
 
 repositories {
     mavenCentral()
@@ -22,9 +22,8 @@ intellij {
     version "IU-202.6397.94"
     patchPluginXml {
         sinceBuild "191.6707.61"
-        untilBuild "202.*"
+        untilBuild "203.*"
     }
-    type "IU"
     plugins = ['java']
 }
 
