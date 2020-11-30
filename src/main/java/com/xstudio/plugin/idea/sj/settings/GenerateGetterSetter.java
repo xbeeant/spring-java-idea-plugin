@@ -8,7 +8,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.CollectionListModel;
 import com.xstudio.plugin.idea.sj.settings.po.Template;
-import com.xstudio.plugin.idea.sj.tuil.JavaBeansUtil;
+import com.xstudio.plugin.idea.sj.util.JavaBeansUtil;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -71,7 +71,7 @@ public class GenerateGetterSetter {
         } else {
             sb.append("get");
         }
-        sb.append(JavaBeansUtil.getCamelCaseString(field.getName(), true));
+        sb.append(JavaBeansUtil.getFirstCharacterUppercase(field.getName()));
         sb.append("(){\n");
         sb.append(" return this.").append(field.getName()).append(";}\n");
         return sb.toString();
@@ -88,7 +88,7 @@ public class GenerateGetterSetter {
             sb.append("static ");
         }
         sb.append("void ");
-        sb.append("set").append(JavaBeansUtil.getCamelCaseString(field.getName(), true));
+        sb.append("set").append(JavaBeansUtil.getFirstCharacterUppercase(field.getName()));
         sb.append("(").append(field.getType().getPresentableText()).append(" ").append(field.getName()).append("){\n");
         sb.append("this.").append(field.getName()).append(" = ").append(field.getName()).append(";");
         sb.append("}");
