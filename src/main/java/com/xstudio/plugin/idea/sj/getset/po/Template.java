@@ -1,4 +1,4 @@
-package com.xstudio.plugin.idea.sj.settings.po;
+package com.xstudio.plugin.idea.sj.getset.po;
 
 /**
  * @author xiaobiao

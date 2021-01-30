@@ -1,4 +1,4 @@
-package com.xstudio.plugin.idea.sj;
+package com.xstudio.plugin.idea.sj.spring;
 
 import com.intellij.lang.jvm.annotation.*;
 import com.intellij.openapi.module.Module;
@@ -9,10 +9,7 @@ import com.intellij.psi.impl.java.stubs.index.JavaAnnotationIndex;
 import com.intellij.psi.impl.source.tree.java.PsiArrayInitializerMemberValueImpl;
 import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.xstudio.plugin.idea.sj.components.RestListForm;
-import com.xstudio.plugin.idea.sj.spring.Annotations;
-import com.xstudio.plugin.idea.sj.spring.Mapping;
-import com.xstudio.plugin.idea.sj.spring.RequestPath;
+import com.xstudio.plugin.idea.sj.spring.components.RestListForm;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.swing.*;

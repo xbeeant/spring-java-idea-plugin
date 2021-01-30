@@ -1,11 +1,11 @@
-package com.xstudio.plugin.idea.sj.settings;
+package com.xstudio.plugin.idea.sj.getset;
 
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-import com.xstudio.plugin.idea.sj.settings.po.Template;
+import com.xstudio.plugin.idea.sj.getset.po.Template;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

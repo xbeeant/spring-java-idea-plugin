@@ -1,6 +1,6 @@
-package com.xstudio.plugin.idea.sj.settings;
+package com.xstudio.plugin.idea.sj.getset;
 
-import com.xstudio.plugin.idea.sj.settings.po.Template;
+import com.xstudio.plugin.idea.sj.getset.po.Template;
 
 import javax.swing.*;
 import java.util.Objects;

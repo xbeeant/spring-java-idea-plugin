@@ -13,12 +13,12 @@
     ]]>
     </description>
 
-    <idea-version since-build="191.6707.61" until-build="203.*" />
+    <idea-version since-build="191.6707.61" />
     <change-notes>
         <![CDATA[
-        1.0.9:
+        1.0.10:
         <ul>
-          <li>fix: bugs</li>
+          <li>feat: support 211.*</li>
         </ul>
     ]]>
     </change-notes>
@@ -30,27 +30,27 @@
 
     <project-components>
         <component>
-            <implementation-class>com.xstudio.plugin.idea.sj.components.SpringRestServicesComponent</implementation-class>
+            <implementation-class>com.xstudio.plugin.idea.sj.spring.components.SpringRestServicesComponent</implementation-class>
         </component>
     </project-components>
     <extensions defaultExtensionNs="com.intellij">
         <applicationService
-                serviceImplementation="com.xstudio.plugin.idea.sj.settings.TemplatePersistentConfiguration" />
+                serviceImplementation="com.xstudio.plugin.idea.sj.getset.TemplatePersistentConfiguration" />
         <applicationConfigurable groupId="tools" displayName="Getter Setter Template" id="Xstudio.Plugin.SpringJava"
-                                 instance="com.xstudio.plugin.idea.sj.settings.TemplateConfigurable"/>
+                                 instance="com.xstudio.plugin.idea.sj.getset.TemplateConfigurable"/>
     </extensions>
 
     <actions>
         <!-- Add your actions here -->
-        <action id="GenerateGetSetAction" class="com.xstudio.plugin.idea.sj.settings.GenerateGetSetAction"
+        <action id="GenerateGetSetAction" class="com.xstudio.plugin.idea.sj.getset.GenerateGetSetAction"
                 text="Getter and Setter With Comment">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>
-        <action id="GenerateGetAction" class="com.xstudio.plugin.idea.sj.settings.GenerateGetAction"
+        <action id="GenerateGetAction" class="com.xstudio.plugin.idea.sj.getset.GenerateGetAction"
                 text="Getter With Comment">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>
-        <action id="GenerateSetAction" class="com.xstudio.plugin.idea.sj.settings.GenerateSetAction"
+        <action id="GenerateSetAction" class="com.xstudio.plugin.idea.sj.getset.GenerateSetAction"
                 text="Setter With Comment">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>

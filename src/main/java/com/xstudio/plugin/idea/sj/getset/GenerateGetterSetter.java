@@ -1,4 +1,4 @@
-package com.xstudio.plugin.idea.sj.settings;
+package com.xstudio.plugin.idea.sj.getset;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -7,7 +7,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.CollectionListModel;
-import com.xstudio.plugin.idea.sj.settings.po.Template;
+import com.xstudio.plugin.idea.sj.getset.po.Template;
 import com.xstudio.plugin.idea.sj.util.JavaBeansUtil;
 
 import java.text.DateFormat;
@@ -24,8 +24,8 @@ import java.util.Objects;
 public class GenerateGetterSetter {
 
     public static void createGetSet(PsiClass psiClass, boolean getter, boolean setter, Template template) {
-        List<PsiField> fields = new CollectionListModel<PsiField>(psiClass.getFields()).getItems();
-        List<PsiMethod> methods = new CollectionListModel<PsiMethod>(psiClass.getMethods()).getItems();
+        List<PsiField> fields = new CollectionListModel<>(psiClass.getFields()).getItems();
+        List<PsiMethod> methods = new CollectionListModel<>(psiClass.getMethods()).getItems();
         HashSet<String> methodSet = new HashSet<>();
         for (PsiMethod method : methods) {
             methodSet.add(method.getName());
@@ -34,7 +34,7 @@ public class GenerateGetterSetter {
         String methodText;
         PsiMethod toMethod;
         for (PsiField field : fields) {
-            if (!(Objects.requireNonNull(field.getModifierList())).hasModifierProperty("final")) {
+            if (!(Objects.requireNonNull(field.getModifierList())).hasModifierProperty(PsiModifier.FINAL)) {
                 if (getter) {
                     methodText = buildGet(field, template);
                     toMethod = elementFactory.createMethodFromText(methodText, psiClass);

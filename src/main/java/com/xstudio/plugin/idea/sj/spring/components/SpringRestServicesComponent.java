@@ -1,4 +1,4 @@
-package com.xstudio.plugin.idea.sj.components;
+package com.xstudio.plugin.idea.sj.spring.components;
 
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.openapi.application.ApplicationManager;
@@ -15,7 +15,7 @@ import com.intellij.ui.components.JBList;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.util.DisposeAwareRunnable;
-import com.xstudio.plugin.idea.sj.RequestPathUtil;
+import com.xstudio.plugin.idea.sj.spring.RequestPathUtil;
 import com.xstudio.plugin.idea.sj.spring.RequestPath;
 
 import javax.swing.*;

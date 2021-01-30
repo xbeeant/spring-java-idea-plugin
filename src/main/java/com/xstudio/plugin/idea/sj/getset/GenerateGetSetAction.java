@@ -1,4 +1,4 @@
-package com.xstudio.plugin.idea.sj.settings;
+package com.xstudio.plugin.idea.sj.getset;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -6,23 +6,26 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
-import com.xstudio.plugin.idea.sj.settings.po.Template;
+import com.xstudio.plugin.idea.sj.getset.po.Template;
 
 /**
  * @author xiaobiao
  * @version 2020/9/26
  */
-public class GenerateSetAction extends AnAction {
+public class GenerateGetSetAction extends AnAction {
+
     private Template template;
 
     @Override
     public void actionPerformed(AnActionEvent e) {
         template = TemplatePersistentConfiguration.getInstance().getTemplate();
         PsiClass psiClass = GenerateGetterSetter.getPsiMethodFromContext(e);
+        assert psiClass != null;
         final PsiFile file = psiClass.getContainingFile();
         Project project = psiClass.getProject();
         WriteCommandAction.writeCommandAction(project, file)
                 .withGlobalUndo()
-                .run(() -> GenerateGetterSetter.createGetSet(psiClass, false, true, template));
+                .run(() -> GenerateGetterSetter.createGetSet(psiClass, true, true, template));
     }
+
 }

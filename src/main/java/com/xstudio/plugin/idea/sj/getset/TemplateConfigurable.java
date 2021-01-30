@@ -1,4 +1,4 @@
-package com.xstudio.plugin.idea.sj.settings;
+package com.xstudio.plugin.idea.sj.getset;
 
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
