@@ -6,3 +6,7 @@
 Usage: ALT + Enter
 
 
+### Thanks
+
+[gen-javadoc](https://github.com/bpark/gen-javadoc)
+

@@ -13,7 +13,7 @@ public class TemplateSetting extends JDialog {
     private JTextArea setterTemplate;
     private JTextArea getterTemplate;
     private JPanel mainPanel;
-    private JTextArea inThisTemplateYouTextArea;
+    private JTextArea templateDescription;
 
     private final Template template;
 

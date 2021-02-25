@@ -1,30 +1,93 @@
 package com.xstudio.plugin.idea.sj.getset;
 
+import com.intellij.codeInsight.generation.PsiFieldMember;
+import com.intellij.ide.util.MemberChooser;
+import com.intellij.ide.util.MemberChooserBuilder;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.CollectionListModel;
 import com.xstudio.plugin.idea.sj.getset.po.Template;
 import com.xstudio.plugin.idea.sj.util.JavaBeansUtil;
 
+import javax.swing.*;
+import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
- * @author xiaobiao
- * @version 2020/9/26
+ * @author beeant
  */
-public class GenerateGetterSetter {
+public class PsiUtil {
+    private PsiUtil() {
 
-    public static void createGetSet(PsiClass psiClass, boolean getter, boolean setter, Template template) {
+    }
+    public static void showDialog(AnActionEvent e, EnumMethodType methodType) {
+        Template template = TemplatePersistentConfiguration.getInstance().getTemplate();
+        PsiClass psiClass = getPsiMethodFromContext(e);
+        if (null == psiClass) {
+            return;
+        }
+        final PsiFile file = psiClass.getContainingFile();
+        Project project = psiClass.getProject();
+
+        // show fields selector
+        final MemberChooserBuilder<PsiFieldMember> builder = new MemberChooserBuilder<>(project);
+        builder.setTitle("Select Fields to Generate Getters and Setters");
+        builder.setHeaderPanel(createFieldsPanel());
+
+        final PsiFieldMember[] psiMethodMembers = PsiUtil.fields(psiClass);
+        SwingUtilities.invokeLater(() -> {
+            if (project.isDisposed()) {
+                return;
+            }
+            MemberChooser<PsiFieldMember> dialog = builder.createBuilder(psiMethodMembers);
+            dialog.selectElements(psiMethodMembers);
+            dialog.show();
+            if (MemberChooser.OK_EXIT_CODE == dialog.getExitCode()) {
+                List<PsiField> selectedFields = PsiUtil.toPsiFields(dialog.getSelectedElements());
+                WriteCommandAction.writeCommandAction(project, file)
+                        .withGlobalUndo()
+                        .run(() -> createGetSet(psiClass, selectedFields,
+                                !EnumMethodType.SET.equals(methodType),
+                                !EnumMethodType.GET.equals(methodType),
+                                template));
+            }
+        });
+    }
+
+    public static PsiClass getPsiMethodFromContext(AnActionEvent e) {
+        PsiElement elementAt = getPsiElement(e);
+        return (elementAt == null) ? null : PsiTreeUtil.getParentOfType(elementAt, PsiClass.class);
+    }
+
+    public static JComponent createFieldsPanel() {
+        FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
+        return new JPanel(layout);
+    }
+
+    public static PsiFieldMember[] fields(PsiClass psiClass) {
         List<PsiField> fields = new CollectionListModel<>(psiClass.getFields()).getItems();
+        return toMembers(fields);
+    }
+
+    private static List<PsiField> toPsiFields(List<PsiFieldMember> members) {
+        List<PsiField> psiFields = new ArrayList<>();
+        for (PsiFieldMember psiFieldMember : members) {
+            PsiElement psiElement = psiFieldMember.getPsiElement();
+            psiFields.add((PsiField) psiElement);
+        }
+        return psiFields;
+    }
+
+    public static void createGetSet(PsiClass psiClass, List<PsiField> fields, boolean getter, boolean setter, Template template) {
         List<PsiMethod> methods = new CollectionListModel<>(psiClass.getMethods()).getItems();
         HashSet<String> methodSet = new HashSet<>();
         for (PsiMethod method : methods) {
@@ -32,27 +95,39 @@ public class GenerateGetterSetter {
         }
         PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(psiClass.getProject());
         String methodText;
-        PsiMethod toMethod;
         for (PsiField field : fields) {
             if (!(Objects.requireNonNull(field.getModifierList())).hasModifierProperty(PsiModifier.FINAL)) {
                 if (getter) {
                     methodText = buildGet(field, template);
-                    toMethod = elementFactory.createMethodFromText(methodText, psiClass);
-                    if (!methodSet.contains(toMethod.getName())) {
-                        psiClass.add(toMethod);
-                    }
+                    addMethod(psiClass, methodSet, elementFactory, methodText);
                 }
 
                 if (setter) {
                     methodText = buildSet(field, template);
-                    elementFactory = JavaPsiFacade.getElementFactory(psiClass.getProject());
-                    toMethod = elementFactory.createMethodFromText(methodText, psiClass);
-                    if (!methodSet.contains(toMethod.getName())) {
-                        psiClass.add(toMethod);
-                    }
+                    addMethod(psiClass, methodSet, elementFactory, methodText);
                 }
             }
         }
+    }
+
+    private static PsiElement getPsiElement(AnActionEvent e) {
+        PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
+        Editor editor = e.getData(PlatformDataKeys.EDITOR);
+        if (psiFile != null && editor != null) {
+            int offset = editor.getCaretModel().getOffset();
+            return psiFile.findElementAt(offset);
+        }
+        e.getPresentation().setEnabled(false);
+        return null;
+    }
+
+    public static PsiFieldMember[] toMembers(List<PsiField> fields) {
+        PsiFieldMember[] dialogMembers = new PsiFieldMember[fields.size()];
+
+        for (int i = 0; i < dialogMembers.length; i++) {
+            dialogMembers[i] = new PsiFieldMember(fields.get(i));
+        }
+        return dialogMembers;
     }
 
     private static String buildGet(PsiField field, Template template) {
@@ -65,7 +140,7 @@ public class GenerateGetterSetter {
         if ((Objects.requireNonNull(field.getModifierList())).hasModifierProperty("static")) {
             sb.append("static ");
         }
-        sb.append(field.getType().getPresentableText() + " ");
+        sb.append(field.getType().getPresentableText()).append(" ");
         if ("boolean".equals(field.getType().getPresentableText())) {
             sb.append("is");
         } else {
@@ -75,6 +150,13 @@ public class GenerateGetterSetter {
         sb.append("(){\n");
         sb.append(" return this.").append(field.getName()).append(";}\n");
         return sb.toString();
+    }
+
+    private static void addMethod(PsiClass psiClass, HashSet<String> methodSet, PsiElementFactory elementFactory, String methodText) {
+        PsiMethod toMethod = elementFactory.createMethodFromText(methodText, psiClass);
+        if (!methodSet.contains(toMethod.getName())) {
+            psiClass.add(toMethod);
+        }
     }
 
     private static String buildSet(PsiField field, Template template) {
@@ -95,7 +177,6 @@ public class GenerateGetterSetter {
         return sb.toString();
     }
 
-
     private static String format(String string, PsiField field, Template template) {
         DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
         DateFormat dateTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -106,7 +187,6 @@ public class GenerateGetterSetter {
         } else {
             oldContent = field.getDocComment().getText();
         }
-        oldContent = oldContent.replaceAll("[\n,\r,*,/,\t]", "").trim();
         if ("get".equals(string)) {
             oldContent = template.getGetter().toLowerCase()
                     .replaceAll("\\$\\{field_comment}", oldContent)
@@ -123,21 +203,5 @@ public class GenerateGetterSetter {
                     .replaceAll("\\$\\{field_name}", field.getName());
         }
         return oldContent;
-    }
-
-    public static PsiClass getPsiMethodFromContext(AnActionEvent e) {
-        PsiElement elementAt = getPsiElement(e);
-        return (elementAt == null) ? null : PsiTreeUtil.getParentOfType(elementAt, PsiClass.class);
-    }
-
-    private static PsiElement getPsiElement(AnActionEvent e) {
-        PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
-        Editor editor = e.getData(PlatformDataKeys.EDITOR);
-        if (psiFile != null && editor != null) {
-            int offset = editor.getCaretModel().getOffset();
-            return psiFile.findElementAt(offset);
-        }
-        e.getPresentation().setEnabled(false);
-        return null;
     }
 }

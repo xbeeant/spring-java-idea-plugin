@@ -16,9 +16,9 @@
     <idea-version since-build="191.6707.61" />
     <change-notes>
         <![CDATA[
-        1.0.10:
+        1.0.11:
         <ul>
-          <li>feat: support 211.*</li>
+          <li>feat: fields selector</li>
         </ul>
     ]]>
     </change-notes>
