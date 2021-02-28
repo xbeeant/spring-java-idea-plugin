@@ -19,7 +19,7 @@ public class FieldJavaDocGenerator extends AbstractJavaDocGenerator<PsiField> {
     @Override
     public PsiDocComment generate(PsiClass psiClass, @NotNull PsiField element) {
         JavaDoc javaDoc = new JavaDoc();
-        String name = element.getText();
+        String name = element.getName();
         // doc for description
         javaDoc.addDescription(BiyingTranslate.translate(JavaBeansUtil.humpToSpace(name)));
 

@@ -9,6 +9,15 @@
     <li>spring request toolkit</li>
     <li>Generate SerialVersionUID for java class</li>
     <li>Generate getter setter method with field comment</li>
+    <li>Add Javadoc comments, using biying translate api to translate English to Chinese</li>
+    </ul>
+
+    <p>Spring和Java常用工具插件</p>
+    <ul>
+    <li>查看&搜索API接口</li>
+    <li>生成序列化ID</li>
+    <li>生成get set方法</li>
+    <li>添加注释，使用必应的API自动翻译（英文到中文）</li>
     </ul>
     ]]>
     </description>
