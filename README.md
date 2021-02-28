@@ -7,6 +7,7 @@
 * Generate getter setter method with field comment
 * Add Javadoc comments, using biying translate api to translate English to Chinese
 ![示例](./docs/comments.gif)
+* Add Swagger Annotation Generator
 
 Usage: ALT + Enter
 
@@ -14,8 +15,8 @@ Usage: ALT + Enter
 * 查看&搜索API接口
 * 生成序列化ID 
 * 生成get set方法
-  
-* 添加注释，使用必应的API自动翻译（英文到中文
+* 添加注释，使用必应的API自动翻译（英文到中文）
+* 添加Swagger注解生成器
 
 用法: ALT + Enter
 
