@@ -28,6 +28,7 @@
         1.0.11:
         <ul>
           <li>feat: fields selector</li>
+          <li>feat: comments generator</li>
         </ul>
     ]]>
     </change-notes>
