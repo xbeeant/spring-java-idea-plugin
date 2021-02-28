@@ -10,6 +10,7 @@
     <li>Generate SerialVersionUID for java class</li>
     <li>Generate getter setter method with field comment</li>
     <li>Add Javadoc comments, using biying translate api to translate English to Chinese</li>
+    <li>Add swagger annotation generator</li>
     </ul>
 
     <p>Spring和Java常用工具插件</p>
@@ -18,6 +19,7 @@
     <li>生成序列化ID</li>
     <li>生成get set方法</li>
     <li>添加注释，使用必应的API自动翻译（英文到中文）</li>
+    <li>添加Swagger注解生成</li>
     </ul>
     ]]>
     </description>
@@ -68,8 +70,12 @@
                 text="Serialize Me" description="Generate SerialVersionUID">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>
-        <action id="JavadocGenerateAction" class="com.xstudio.plugin.idea.sj.javadoc.JavadocGenerateAction"
+        <action id="JavadocGenerate" class="com.xstudio.plugin.idea.sj.javadoc.JavadocGenerateAction"
                 text="Add Javadoc Comment" description="Add Javadoc Comment">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
+        <action id="SwaggerGenerate" class="com.xstudio.plugin.idea.sj.swagger.GenerateSwaggerAnnotationAction"
+                text="Swagger Annotation" description="Generate Swagger Annotation">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>
     </actions>

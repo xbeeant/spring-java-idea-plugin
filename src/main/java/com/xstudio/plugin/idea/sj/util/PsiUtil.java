@@ -33,8 +33,53 @@ public class PsiUtil {
 
     }
 
+    /**
+     * Gets the java element.
+     *
+     * @param element the Element
+     * @return the Java element
+     */
+    @NotNull
+    public static PsiElement getJavaElement(@NotNull PsiElement element) {
+        PsiElement result = element;
+        PsiField field = PsiTreeUtil.getParentOfType(element, PsiField.class);
+        PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+        PsiClass clazz = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+        PsiParameter parameter = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
+        if (field != null) {
+            result = field;
+        } else if (parameter != null) {
+            return parameter;
+        } else if (method != null) {
+            result = method;
+        } else if (clazz != null) {
+            result = clazz;
+        }
+        return result;
+    }
+
     public static PsiElement getPsiElement(PsiFile file, int startPosition) {
         return PsiUtilCore.getElementAtOffset(file, startPosition);
+    }
+
+    public static boolean isAllowedElementType(@NotNull PsiElement element) {
+        boolean result = false;
+        if (element instanceof PsiClass ||
+                element instanceof PsiField ||
+                element instanceof PsiMethod) {
+            result = true;
+        }
+        return result;
+    }
+
+    public static boolean isElementInSelection(@NotNull PsiElement element, int startPosition, int endPosition) {
+        boolean result = false;
+        int elementTextOffset = element.getTextRange().getStartOffset();
+        if (elementTextOffset >= startPosition &&
+                elementTextOffset <= endPosition) {
+            result = true;
+        }
+        return result;
     }
 
     public static void showDialog(AnActionEvent e, EnumMethodType methodType) {
@@ -211,49 +256,5 @@ public class PsiUtil {
                     .replaceAll("\\$\\{field_name}", field.getName());
         }
         return oldContent;
-    }
-
-    public static boolean isElementInSelection(@NotNull PsiElement element, int startPosition, int endPosition) {
-        boolean result = false;
-        int elementTextOffset = element.getTextRange().getStartOffset();
-        if (elementTextOffset >= startPosition &&
-                elementTextOffset <= endPosition) {
-            result = true;
-        }
-        return result;
-    }
-
-    public static boolean isAllowedElementType(@NotNull PsiElement element) {
-        boolean result = false;
-        if (element instanceof PsiClass ||
-                element instanceof PsiField ||
-                element instanceof PsiMethod) {
-            result = true;
-        }
-        return result;
-    }
-
-
-
-    /**
-     * Gets the java element.
-     *
-     * @param element the Element
-     * @return the Java element
-     */
-    @NotNull
-    public static PsiElement getJavaElement(@NotNull PsiElement element) {
-        PsiElement result = element;
-        PsiField field = PsiTreeUtil.getParentOfType(element, PsiField.class);
-        PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
-        PsiClass clazz = PsiTreeUtil.getParentOfType(element, PsiClass.class);
-        if (field != null) {
-            result = field;
-        } else if (method != null) {
-            result = method;
-        } else if (clazz != null) {
-            result = clazz;
-        }
-        return result;
     }
 }
