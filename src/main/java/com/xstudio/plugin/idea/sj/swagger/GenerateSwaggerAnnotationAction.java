@@ -65,7 +65,7 @@ public class GenerateSwaggerAnnotationAction extends AnAction {
     private void addMethodAnnotation(PsiMethod psiMethod) {
         String sb = "@ApiOperation(value = \"" +
                 BiyingTranslate.translate(psiMethod.getName()) +
-                "\")";
+                "\", notes = \"\")";
         PsiAnnotation psiAnnotation = elementFactory.createAnnotationFromText(sb, psiMethod);
         PsiDocComment docComment = psiMethod.getDocComment();
         if (null != docComment) {
@@ -78,7 +78,7 @@ public class GenerateSwaggerAnnotationAction extends AnAction {
     private void addClassAnnotation(PsiClass psiClass) {
         String sb = "@Api(tags = \"" +
                 BiyingTranslate.translate(psiClass.getName()) +
-                "\", notes = \"\" )";
+                "\")";
         PsiAnnotation psiAnnotation = elementFactory.createAnnotationFromText(sb, psiClass);
         PsiDocComment docComment = psiClass.getDocComment();
         if (null != docComment) {
