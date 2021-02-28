@@ -36,7 +36,7 @@ public class GenerateSwaggerAnnotationAction extends AnAction {
             for (PsiParameter parameter : parameters) {
                 WriteCommandAction.writeCommandAction(project, file)
                         .withGlobalUndo()
-                        .run(() -> addAnnotation(parameter));
+                        .run(() -> addParameterAnnotation(parameter));
 
             }
             // method annotation
@@ -46,14 +46,26 @@ public class GenerateSwaggerAnnotationAction extends AnAction {
         } else if (element instanceof PsiParameter) {
             WriteCommandAction.writeCommandAction(project, file)
                     .withGlobalUndo()
-                    .run(() -> addAnnotation((PsiParameter) element));
+                    .run(() -> addParameterAnnotation((PsiParameter) element));
+        } else if (element instanceof PsiClass) {
+            WriteCommandAction.writeCommandAction(project, file)
+                    .withGlobalUndo()
+                    .run(() -> addClassAnnotation((PsiClass) element));
         }
+    }
+
+    private void addParameterAnnotation(PsiParameter parameter) {
+        String sb = "@ApiParam(value = \"" +
+                BiyingTranslate.translate(parameter.getName()) +
+                "\", required = true, example = \"\" ) \n";
+        PsiAnnotation psiAnnotation = elementFactory.createAnnotationFromText(sb, parameter);
+        parameter.addBefore(psiAnnotation, parameter.getFirstChild());
     }
 
     private void addMethodAnnotation(PsiMethod psiMethod) {
         String sb = "@ApiOperation(value = \"" +
                 BiyingTranslate.translate(psiMethod.getName()) +
-                "\", notes = \"\" )";
+                "\")";
         PsiAnnotation psiAnnotation = elementFactory.createAnnotationFromText(sb, psiMethod);
         PsiDocComment docComment = psiMethod.getDocComment();
         if (null != docComment) {
@@ -63,11 +75,16 @@ public class GenerateSwaggerAnnotationAction extends AnAction {
         }
     }
 
-    private void addAnnotation(PsiParameter parameter) {
-        String sb = "@ApiParam(value = \"" +
-                BiyingTranslate.translate(parameter.getName()) +
-                "\", required = true, example = \"\" ) \n";
-        PsiAnnotation psiAnnotation = elementFactory.createAnnotationFromText(sb, parameter);
-        parameter.addBefore(psiAnnotation, parameter.getFirstChild());
+    private void addClassAnnotation(PsiClass psiClass) {
+        String sb = "@Api(tags = \"" +
+                BiyingTranslate.translate(psiClass.getName()) +
+                "\", notes = \"\" )";
+        PsiAnnotation psiAnnotation = elementFactory.createAnnotationFromText(sb, psiClass);
+        PsiDocComment docComment = psiClass.getDocComment();
+        if (null != docComment) {
+            psiClass.addAfter(psiAnnotation, docComment);
+        } else {
+            psiClass.addBefore(psiAnnotation, psiClass.getFirstChild());
+        }
     }
 }
