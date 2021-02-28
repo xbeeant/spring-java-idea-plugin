@@ -55,7 +55,11 @@
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>
         <action id="SerializeGenerator" class="com.xstudio.plugin.idea.sj.serialize.SerializeGenerator"
-                text="Generator SerialVersionUID" description="Generator A SerialVersionUID">
+                text="Serialize Me" description="Generate SerialVersionUID">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
+        <action id="JavadocGenerateAction" class="com.xstudio.plugin.idea.sj.javadoc.JavadocGenerateAction"
+                text="Add Javadoc Comment" description="Add Javadoc Comment">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>
     </actions>

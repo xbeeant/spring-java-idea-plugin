@@ -138,4 +138,8 @@ public class JavaBeansUtil {
 
         return answer;
     }
+
+    public static String humpToSpace(String name) {
+        return name.replaceAll("[A-Z]", " $0").toLowerCase();
+    }
 }

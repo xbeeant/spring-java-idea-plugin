@@ -2,6 +2,7 @@ package com.xstudio.plugin.idea.sj.getset;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.xstudio.plugin.idea.sj.util.PsiUtil;
 
 /**
  * @author xiaobiao

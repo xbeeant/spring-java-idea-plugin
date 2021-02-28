@@ -1,4 +1,4 @@
-package com.xstudio.plugin.idea.sj.getset;
+package com.xstudio.plugin.idea.sj.util;
 
 import com.intellij.codeInsight.generation.PsiFieldMember;
 import com.intellij.ide.util.MemberChooser;
@@ -11,9 +11,12 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.ui.CollectionListModel;
+import com.xstudio.plugin.idea.sj.getset.EnumMethodType;
+import com.xstudio.plugin.idea.sj.getset.TemplatePersistentConfiguration;
 import com.xstudio.plugin.idea.sj.getset.po.Template;
-import com.xstudio.plugin.idea.sj.util.JavaBeansUtil;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,6 +32,11 @@ public class PsiUtil {
     private PsiUtil() {
 
     }
+
+    public static PsiElement getPsiElement(PsiFile file, int startPosition) {
+        return PsiUtilCore.getElementAtOffset(file, startPosition);
+    }
+
     public static void showDialog(AnActionEvent e, EnumMethodType methodType) {
         Template template = TemplatePersistentConfiguration.getInstance().getTemplate();
         PsiClass psiClass = getPsiMethodFromContext(e);
@@ -110,9 +118,9 @@ public class PsiUtil {
         }
     }
 
-    private static PsiElement getPsiElement(AnActionEvent e) {
-        PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
-        Editor editor = e.getData(PlatformDataKeys.EDITOR);
+    public static PsiElement getPsiElement(AnActionEvent e) {
+        PsiFile psiFile = LangDataKeys.PSI_FILE.getData(e.getDataContext());
+        Editor editor = PlatformDataKeys.EDITOR.getData(e.getDataContext());
         if (psiFile != null && editor != null) {
             int offset = editor.getCaretModel().getOffset();
             return psiFile.findElementAt(offset);
@@ -203,5 +211,49 @@ public class PsiUtil {
                     .replaceAll("\\$\\{field_name}", field.getName());
         }
         return oldContent;
+    }
+
+    public static boolean isElementInSelection(@NotNull PsiElement element, int startPosition, int endPosition) {
+        boolean result = false;
+        int elementTextOffset = element.getTextRange().getStartOffset();
+        if (elementTextOffset >= startPosition &&
+                elementTextOffset <= endPosition) {
+            result = true;
+        }
+        return result;
+    }
+
+    public static boolean isAllowedElementType(@NotNull PsiElement element) {
+        boolean result = false;
+        if (element instanceof PsiClass ||
+                element instanceof PsiField ||
+                element instanceof PsiMethod) {
+            result = true;
+        }
+        return result;
+    }
+
+
+
+    /**
+     * Gets the java element.
+     *
+     * @param element the Element
+     * @return the Java element
+     */
+    @NotNull
+    public static PsiElement getJavaElement(@NotNull PsiElement element) {
+        PsiElement result = element;
+        PsiField field = PsiTreeUtil.getParentOfType(element, PsiField.class);
+        PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+        PsiClass clazz = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+        if (field != null) {
+            result = field;
+        } else if (method != null) {
+            result = method;
+        } else if (clazz != null) {
+            result = clazz;
+        }
+        return result;
     }
 }
