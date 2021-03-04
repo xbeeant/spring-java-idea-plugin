@@ -10,6 +10,8 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.javadoc.PsiDocTokenImpl;
+import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.ui.CollectionListModel;
@@ -31,6 +33,25 @@ import java.util.*;
 public class PsiUtil {
     private PsiUtil() {
 
+    }
+
+    public static String getDescription(PsiJavaDocumentedElement element) {
+        PsiDocComment docComment = element.getDocComment();
+
+        if (null == docComment) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+
+        PsiElement[] descriptionElements = docComment.getDescriptionElements();
+        for (PsiElement descriptionElement : descriptionElements) {
+            if (descriptionElement instanceof PsiDocTokenImpl) {
+                sb.append(((PsiDocTokenImpl) descriptionElement).getText());
+                sb.append(" ");
+            }
+        }
+
+        return sb.toString();
     }
 
     /**

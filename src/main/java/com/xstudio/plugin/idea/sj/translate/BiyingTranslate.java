@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 public class BiyingTranslate {
-    private static ObjectMapper objectMapper = new ObjectMapper();
-    private static TypeReference typeReference = new TypeReference<List<BiyingTranslateResponse>>() {
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final TypeReference typeReference = new TypeReference<List<BiyingTranslateResponse>>() {
     };
 
     public static String translate(String text) {

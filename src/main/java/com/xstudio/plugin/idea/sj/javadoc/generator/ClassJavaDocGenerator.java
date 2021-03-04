@@ -6,10 +6,9 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import com.xstudio.plugin.idea.sj.javadoc.entity.JavaDoc;
 import com.xstudio.plugin.idea.sj.translate.BiyingTranslate;
 import com.xstudio.plugin.idea.sj.util.JavaBeansUtil;
+import com.xstudio.plugin.idea.sj.util.PsiUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Date;
 
 public class ClassJavaDocGenerator extends AbstractJavaDocGenerator<PsiClass> {
 
@@ -22,11 +21,17 @@ public class ClassJavaDocGenerator extends AbstractJavaDocGenerator<PsiClass> {
     public PsiDocComment generate(PsiClass psiClass, @NotNull PsiClass element) {
         JavaDoc javaDoc = new JavaDoc();
         String name = element.getName();
-        if (name.startsWith("I")) {
-            name = name.substring(1);
+
+        String description = PsiUtil.getDescription(element);
+        if (null == description) {
+            if (name.startsWith("I")) {
+                name = name.substring(1);
+            }
+            description = BiyingTranslate.translate(JavaBeansUtil.humpToSpace(name));
         }
+
         // doc for description
-        javaDoc.addDescription(BiyingTranslate.translate(JavaBeansUtil.humpToSpace(name)));
+        javaDoc.addDescription(description);
 
         return psiElementFactory.createDocCommentFromText(javaDoc.toString());
     }

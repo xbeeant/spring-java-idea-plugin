@@ -7,6 +7,7 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import com.xstudio.plugin.idea.sj.javadoc.entity.JavaDoc;
 import com.xstudio.plugin.idea.sj.translate.BiyingTranslate;
 import com.xstudio.plugin.idea.sj.util.JavaBeansUtil;
+import com.xstudio.plugin.idea.sj.util.PsiUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,8 +21,13 @@ public class FieldJavaDocGenerator extends AbstractJavaDocGenerator<PsiField> {
     public PsiDocComment generate(PsiClass psiClass, @NotNull PsiField element) {
         JavaDoc javaDoc = new JavaDoc();
         String name = element.getName();
+        String description = PsiUtil.getDescription(element);
+        if (null == description) {
+            description = BiyingTranslate.translate(JavaBeansUtil.humpToSpace(name));
+        }
+
         // doc for description
-        javaDoc.addDescription(BiyingTranslate.translate(JavaBeansUtil.humpToSpace(name)));
+        javaDoc.addDescription(description);
 
         return psiElementFactory.createDocCommentFromText(javaDoc.toString());
     }
