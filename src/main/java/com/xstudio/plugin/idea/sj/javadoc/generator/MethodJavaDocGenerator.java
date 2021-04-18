@@ -32,7 +32,10 @@ public class MethodJavaDocGenerator extends AbstractJavaDocGenerator<PsiMethod> 
         PsiParameterList parameterList = element.getParameterList();
         PsiParameter[] parameters = parameterList.getParameters();
         for (PsiParameter parameter : parameters) {
-            String className = ((PsiClassReferenceType) parameter.getType()).getClassName();
+            String className = null;
+            if (parameter instanceof PsiClassReferenceType) {
+                className = ((PsiClassReferenceType) parameter.getType()).getClassName();
+            }
             javaDoc.addParam(parameter.getName(), className);
         }
         // doc for return
@@ -51,7 +54,9 @@ public class MethodJavaDocGenerator extends AbstractJavaDocGenerator<PsiMethod> 
             }
         } else {
             PsiPrimitiveType psiPrimitiveType = (PsiPrimitiveType) resultType;
-            javaDoc.setRturn(psiPrimitiveType.getName());
+            if(!"void".equals(psiPrimitiveType.getName())) {
+                javaDoc.setRturn(psiPrimitiveType.getName());
+            }
         }
 
         PsiReferenceList throwsList = element.getThrowsList();

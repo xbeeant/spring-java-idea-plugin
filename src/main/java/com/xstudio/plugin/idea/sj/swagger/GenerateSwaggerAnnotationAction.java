@@ -57,7 +57,7 @@ public class GenerateSwaggerAnnotationAction extends AnAction {
     private void addParameterAnnotation(PsiParameter parameter) {
         String sb = "@ApiParam(value = \"" +
                 BiyingTranslate.translate(parameter.getName()) +
-                "\", required = true, example = \"\" ) \n";
+                "\", required = true) \n";
         PsiAnnotation psiAnnotation = elementFactory.createAnnotationFromText(sb, parameter);
         parameter.addBefore(psiAnnotation, parameter.getFirstChild());
     }

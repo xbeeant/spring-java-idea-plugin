@@ -87,7 +87,7 @@ public class JavaDoc {
 
     public static class Param {
         private String description;
-        private String link;
+
         private String name;
 
         public Param(String name, String link) {
