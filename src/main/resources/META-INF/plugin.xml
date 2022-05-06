@@ -24,7 +24,7 @@
     ]]>
     </description>
 
-    <idea-version since-build="201.*.*" />
+    <idea-version since-build="201.*.*"/>
     <change-notes>
         <![CDATA[
         1.0.12:
@@ -39,16 +39,13 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
 
-    <project-components>
-        <component>
-            <implementation-class>com.xstudio.plugin.idea.sj.spring.components.SpringRestServicesComponent</implementation-class>
-        </component>
-    </project-components>
     <extensions defaultExtensionNs="com.intellij">
         <applicationService
-                serviceImplementation="com.xstudio.plugin.idea.sj.getset.TemplatePersistentConfiguration" />
+                serviceImplementation="com.xstudio.plugin.idea.sj.getset.TemplatePersistentConfiguration"/>
         <applicationConfigurable groupId="tools" displayName="Getter Setter Template" id="Xstudio.Plugin.SpringJava"
                                  instance="com.xstudio.plugin.idea.sj.getset.TemplateConfigurable"/>
+        <toolWindow id="Request List" anchor="right"
+                    factoryClass="com.xstudio.plugin.idea.sj.spring.components.SpringRestToolWindow" secondary="true"/>
     </extensions>
 
     <actions>

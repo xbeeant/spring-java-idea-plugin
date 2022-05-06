@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.xstudio'
-version '1.0.12'
+version '1.0.14'
 
 repositories {
     mavenCentral()
@@ -24,16 +24,15 @@ intellij {
     plugins = ['java']
 }
 
-publishPlugin {
-    token = System.getenv("token")
-    channels "Stable"
-}
-
 tasks.withType(GroovyCompile) {
     configure(groovyOptions.forkOptions) {
         memoryMaximumSize = '1g'
         jvmArgs = ['-XX:MaxPermSize=512m', '-Xms512m', '-Xmx1g']
     }
+}
+
+publishPlugin {
+    token = System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
 }
 
 buildSearchableOptions.enabled = false
