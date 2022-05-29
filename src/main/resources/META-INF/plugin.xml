@@ -27,9 +27,11 @@
     <idea-version since-build="201.*.*"/>
     <change-notes>
         <![CDATA[
-        1.0.12:
+        1.0.15:
         <ul>
-          <li>fix: bugs</li>
+          <li>fix: #7</li>
+          <li>fix: #9</li>
+          <li>fix: #10</li>
         </ul>
     ]]>
     </change-notes>
