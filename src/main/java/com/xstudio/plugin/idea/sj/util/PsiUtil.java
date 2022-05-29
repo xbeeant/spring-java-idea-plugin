@@ -260,6 +260,9 @@ public class PsiUtil {
             oldContent = field.getText().substring(0, field.getText().lastIndexOf("\n") + 1);
         } else {
             oldContent = field.getDocComment().getText();
+            if (null != oldContent) {
+                return oldContent;
+            }
         }
         if ("get".equals(string)) {
             oldContent = template.getGetter().toLowerCase()
