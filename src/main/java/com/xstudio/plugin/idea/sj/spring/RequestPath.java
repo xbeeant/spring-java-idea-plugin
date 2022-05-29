@@ -34,11 +34,26 @@ public class RequestPath {
     }
 
     public String getPath() {
+        if (null == path) {
+            return "";
+        }
         return path;
     }
 
     public String getMethod() {
-        return method;
+        int length = 10;
+        if (null != method) {
+            StringBuilder sb = new StringBuilder();
+            int spaceLength = Math.min(method.length(), length);
+            int i = 0;
+            sb.append(method);
+            while (i < spaceLength) {
+                sb.append(" ");
+                i += 1;
+            }
+            return sb.toString();
+        }
+        return "          ";
     }
 
     public PsiElement getPsiMethod() {

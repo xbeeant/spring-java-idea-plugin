@@ -29,6 +29,7 @@ public class RequestPathUtil {
     public static List<RequestPath> findAllRequestInProject(Project project) {
         List<RequestPath> requestPaths = new ArrayList<>();
         ModuleManager moduleManager = ModuleManager.getInstance(project);
+
         Module[] modules = moduleManager.getSortedModules();
         // 获取 request list
         for (Module module : modules) {

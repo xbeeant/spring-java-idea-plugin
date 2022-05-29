@@ -7,8 +7,6 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.util.PsiUtilBase;
 import com.xstudio.plugin.idea.sj.javadoc.generator.ClassJavaDocGenerator;
 import com.xstudio.plugin.idea.sj.javadoc.generator.FieldJavaDocGenerator;
 import com.xstudio.plugin.idea.sj.javadoc.generator.JavaDocGenerator;

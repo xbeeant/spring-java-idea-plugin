@@ -2,14 +2,9 @@ package com.xstudio.plugin.idea.sj.javadoc.generator;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.impl.source.javadoc.PsiDocCommentImpl;
 import com.intellij.psi.javadoc.PsiDocComment;
-import com.xstudio.plugin.idea.sj.javadoc.entity.JavaDoc;
-import com.xstudio.plugin.idea.sj.translate.BiyingTranslate;
-import com.xstudio.plugin.idea.sj.util.JavaBeansUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -3,8 +3,8 @@ package com.xstudio.plugin.idea.sj.spring.components;
 import com.intellij.notification.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBList;
-import com.xstudio.plugin.idea.sj.spring.RequestPathUtil;
 import com.xstudio.plugin.idea.sj.spring.RequestPath;
+import com.xstudio.plugin.idea.sj.spring.RequestPathUtil;
 
 import javax.swing.*;
 import java.awt.*;
