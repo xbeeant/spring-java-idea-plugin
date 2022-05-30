@@ -27,11 +27,9 @@
     <idea-version since-build="201.*.*"/>
     <change-notes>
         <![CDATA[
-        1.0.15:
+        1.0.16:
         <ul>
-          <li>fix: #7</li>
-          <li>fix: #9</li>
-          <li>fix: #10</li>
+          <li>feat: swagger3</li>
         </ul>
     ]]>
     </change-notes>
@@ -72,8 +70,12 @@
                 text="Add Javadoc Comment" description="Add Javadoc Comment">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>
-        <action id="SwaggerGenerate" class="com.xstudio.plugin.idea.sj.swagger.GenerateSwaggerAnnotationAction"
-                text="Swagger Annotation" description="Generate Swagger Annotation">
+        <action id="Swagger2Generate" class="com.xstudio.plugin.idea.sj.swagger.GenerateSwagger2AnnotationAction"
+                text="Swagger2 Annotation" description="Generate Swagger2 Annotation">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
+        <action id="Swagger3Generate" class="com.xstudio.plugin.idea.sj.swagger.GenerateSwagger3AnnotationAction"
+                text="Swagger3 Annotation" description="Generate Swagger3 Annotation">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>
     </actions>

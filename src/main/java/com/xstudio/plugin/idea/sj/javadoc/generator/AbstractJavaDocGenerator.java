@@ -8,6 +8,9 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @author beeant
+ */
 public abstract class AbstractJavaDocGenerator<T extends PsiElement> implements JavaDocGenerator<T> {
 
     public PsiElementFactory psiElementFactory;
