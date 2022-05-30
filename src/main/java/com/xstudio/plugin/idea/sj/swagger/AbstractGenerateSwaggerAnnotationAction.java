@@ -7,6 +7,7 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.xstudio.plugin.idea.sj.util.PsiUtil;
 
@@ -94,8 +95,15 @@ public abstract class AbstractGenerateSwaggerAnnotationAction extends AnAction {
 
 
     public void addAnnotation(PsiElement psiElement, String annotationText) {
+
+        Project project = psiElement.getProject();
+
         PsiAnnotation psiAnnotation = getElementFactory().createAnnotationFromText(annotationText, psiElement);
         psiElement.addBefore(psiAnnotation, getInsertBeforeElement(psiElement));
+
+        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+        codeStyleManager.reformat(psiElement);
+
     }
 
     public PsiElement getInsertBeforeElement(PsiElement element) {
