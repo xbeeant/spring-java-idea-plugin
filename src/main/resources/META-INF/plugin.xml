@@ -29,6 +29,7 @@
         <![CDATA[
         1.0.17:
         <ul>
+          <li>fix: bugs</li>
           <li>feat: support schedule annotation</li>
           <li>feat: multi words search</li>
         </ul>
