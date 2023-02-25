@@ -24,7 +24,7 @@ import java.util.*;
  */
 public class RequestPathUtil {
 
-    private static Map<String, RestListForm> restListForms = new HashMap<>();
+    private static final Map<String, RestListForm> REST_LIST_FORMS = new HashMap<>();
 
     public static List<RequestPath> findAllRequestInProject(Project project) {
         List<RequestPath> requestPaths = new ArrayList<>();
@@ -141,10 +141,10 @@ public class RequestPathUtil {
     }
 
     public static RestListForm getRestListForm(Project project) {
-        if (!restListForms.containsKey(project.getLocationHash())) {
-            RequestPathUtil.restListForms.put(getProjectUniqueCode(project), new RestListForm(project));
+        if (!REST_LIST_FORMS.containsKey(project.getLocationHash())) {
+            RequestPathUtil.REST_LIST_FORMS.put(getProjectUniqueCode(project), new RestListForm(project));
         }
-        return restListForms.get(getProjectUniqueCode(project));
+        return REST_LIST_FORMS.get(getProjectUniqueCode(project));
     }
 
     /**
@@ -196,7 +196,7 @@ public class RequestPathUtil {
             List<JvmAnnotationAttribute> attributes = psiAnnotation.getAttributes();
             for (JvmAnnotationAttribute attribute : attributes) {
                 String name = attribute.getAttributeName();
-                if (name.equals("value")) {
+                if ("value".equals(name) || "path".equals(name) || "name".equals(name)) {
                     Object attributeValue = getAttributeValue(attribute.getAttributeValue());
                     if (attributeValue instanceof String) {
                         paths.add((String) attributeValue);
@@ -227,7 +227,7 @@ public class RequestPathUtil {
     }
 
     public static void removeRestListForm(Project project) {
-        restListForms.remove(getProjectUniqueCode(project));
+        REST_LIST_FORMS.remove(getProjectUniqueCode(project));
     }
 
     private static String getProjectUniqueCode(Project project) {

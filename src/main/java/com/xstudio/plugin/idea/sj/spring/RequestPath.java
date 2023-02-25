@@ -41,19 +41,7 @@ public class RequestPath {
     }
 
     public String getMethod() {
-        int length = 10;
-        if (null != method) {
-            StringBuilder sb = new StringBuilder();
-            int spaceLength = Math.min(method.length(), length);
-            int i = 0;
-            sb.append(method);
-            while (i < spaceLength) {
-                sb.append(" ");
-                i += 1;
-            }
-            return sb.toString();
-        }
-        return "          ";
+        return method;
     }
 
     public PsiElement getPsiMethod() {
