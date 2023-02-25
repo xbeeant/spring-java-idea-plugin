@@ -1,31 +1,65 @@
 package com.xstudio.plugin.idea.sj.spring;
 
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
+
 /**
  * @author xiaobiao
  * @version 2020/5/2
  */
 public class Mapping {
-    private final String method;
+    private String path;
 
-    private final String name;
+    private String type;
 
-    private final String qualifiedName;
+    private PsiMethod psiMethod;
 
-    public Mapping(String method, String name, String qualifiedName) {
-        this.method = method;
-        this.name = name;
-        this.qualifiedName = qualifiedName;
+    private String moduleName;
+
+    public Mapping(String controllerPath, String methodPath, String type, PsiMethod psiMethod, String moduleName) {
+        String prePath = controllerPath;
+        if (controllerPath.endsWith("/")) {
+            prePath = controllerPath.substring(0, controllerPath.length() - 1);
+        }
+
+        String path = methodPath;
+        if (!methodPath.startsWith("/") && !"".equals(path)) {
+            path = "/" + methodPath;
+        }
+
+        this.path = prePath + path;
+        this.type = type;
+        this.psiMethod = psiMethod;
+        this.moduleName = moduleName;
     }
 
-    public String getMethod() {
-        return method;
+    public Mapping(String path, String type, PsiMethod psiMethod, String moduleName) {
+        this.path = path;
+        this.type = type;
+        this.psiMethod = psiMethod;
+        this.moduleName = moduleName;
     }
 
-    public String getName() {
-        return name;
+    public String getPath() {
+        if (null == path) {
+            return "";
+        }
+        return path;
     }
 
-    public String getQualifiedName() {
-        return qualifiedName;
+    public String getType() {
+        return type;
+    }
+
+    public String getFullpath() {
+        return path + type;
+    }
+
+    public PsiElement getPsiMethod() {
+        return psiMethod;
+    }
+
+    public String getModuleName() {
+        return moduleName;
     }
 }

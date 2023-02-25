@@ -9,8 +9,8 @@ import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
-import com.xstudio.plugin.idea.sj.spring.RequestPath;
-import com.xstudio.plugin.idea.sj.spring.RequestPathUtil;
+import com.xstudio.plugin.idea.sj.spring.Mapping;
+import com.xstudio.plugin.idea.sj.spring.MappingHelper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -21,7 +21,19 @@ import java.util.List;
 /**
  * @author xbeeant
  */
-public class SpringRestToolWindow implements ToolWindowFactory {
+public class MappingWindow implements ToolWindowFactory {
+
+    public static boolean containsWords(String inputString, String[] items) {
+        boolean found = true;
+        for (String item : items) {
+            if (!inputString.contains(item.toLowerCase())) {
+                found = false;
+                break;
+            }
+        }
+        return found;
+    }
+
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         StartupManager.getInstance(project).runWhenProjectIsInitialized(new Runnable() {
@@ -29,32 +41,37 @@ public class SpringRestToolWindow implements ToolWindowFactory {
             public void run() {
                 if (project.isInitialized()) {
                     ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-                    RestListForm restListForm = RequestPathUtil.getRestListForm(project);
+                    // 获取请求列表panel
+                    MappingListForm mappingListForm = MappingHelper.getMappingListForm(project);
 
                     // 创建面板
-                    Content content = contentFactory.createContent(restListForm.getPanel(), "", false);
+                    Content content = contentFactory.createContent(mappingListForm.getPanel(), "", false);
                     toolWindow.getContentManager().addContent(content);
-                    JBList<RequestPath> jbList = restListForm.getJbList();
-                    List<RequestPath> requestPaths = RequestPathUtil.findAllRequestInProject(project);
+                    JBList<Mapping> jbList = mappingListForm.getJbList();
+                    List<Mapping> mappings = MappingHelper.findAllMapping(project);
 
                     // 搜索框
-                    restListForm.getRequestSearch().addKeyListener(new KeyAdapter() {
+                    mappingListForm.getRequestSearch().addKeyListener(new KeyAdapter() {
                         @Override
                         public void keyReleased(KeyEvent e) {
-                            String value = restListForm.getRequestSearch().getText();
-                            List<RequestPath> requests = RequestPathUtil.findAllRequestInProject(project);
+                            String value = mappingListForm.getRequestSearch().getText();
+                            List<Mapping> requests = MappingHelper.findAllMapping(project);
                             // 模糊搜索
-                            requests.removeIf(item -> !item.getPath().toLowerCase().contains(value.toLowerCase()));
+                            requests.removeIf(item -> {
+                                        String[] splitValues = value.split(" ");
+                                        return !containsWords(item.getFullpath().toLowerCase(), splitValues);
+                                    }
+                            );
 
-                            DefaultListModel<RequestPath> listModel = RequestPathUtil.getListModel(requests);
+                            DefaultListModel<Mapping> listModel = MappingHelper.getListModel(requests);
                             jbList.setModel(listModel);
                         }
                     });
 
                     // 自定义list渲染器
-                    jbList.setCellRenderer((ListCellRenderer<? super RequestPath>) (list, value, index, isSelected, cellHasFocus) -> {
-                        RequestPath requestPath = value;
-                        JLabel jLabel = new JLabel(requestPath.getMethod() + " " + requestPath.getPath());
+                    jbList.setCellRenderer((ListCellRenderer<? super Mapping>) (list, value, index, isSelected, cellHasFocus) -> {
+                        Mapping mapping = value;
+                        JLabel jLabel = new JLabel(mapping.getType() + " " + mapping.getPath());
                         if (cellHasFocus || isSelected) {
                             jLabel.setBackground(JBColor.LIGHT_GRAY);
                             jLabel.setOpaque(true);
@@ -63,14 +80,14 @@ public class SpringRestToolWindow implements ToolWindowFactory {
                     });
 
                     // 填充list
-                    DefaultListModel<RequestPath> listModel = RequestPathUtil.getListModel(requestPaths);
+                    DefaultListModel<Mapping> listModel = MappingHelper.getListModel(mappings);
                     jbList.setModel(listModel);
                     // 选中监听器
                     // 点击请求 跳转到对应的方法中
                     jbList.addListSelectionListener(e -> {
                         if (e.getValueIsAdjusting()) {
-                            JList<RequestPath> item = (JList<RequestPath>) e.getSource();
-                            RequestPath selectedValue = item.getSelectedValue();
+                            JList<Mapping> item = (JList<Mapping>) e.getSource();
+                            Mapping selectedValue = item.getSelectedValue();
                             if (null != selectedValue) {
                                 NavigationUtil.activateFileWithPsiElement(selectedValue.getPsiMethod(), true);
                             }

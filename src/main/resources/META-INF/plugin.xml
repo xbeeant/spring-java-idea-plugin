@@ -27,9 +27,10 @@
     <idea-version since-build="201.*.*"/>
     <change-notes>
         <![CDATA[
-        1.0.16:
+        1.0.17:
         <ul>
-          <li>feat: swagger3</li>
+          <li>feat: support schedule annotation</li>
+          <li>feat: multi words search</li>
         </ul>
     ]]>
     </change-notes>
@@ -45,7 +46,7 @@
         <applicationConfigurable groupId="tools" displayName="Getter Setter Template" id="Xstudio.Plugin.SpringJava"
                                  instance="com.xstudio.plugin.idea.sj.getset.TemplateConfigurable"/>
         <toolWindow id="Request List" anchor="right"
-                    factoryClass="com.xstudio.plugin.idea.sj.spring.components.SpringRestToolWindow" secondary="true"/>
+                    factoryClass="com.xstudio.plugin.idea.sj.spring.components.MappingWindow" secondary="true"/>
     </extensions>
 
     <actions>
