@@ -2,21 +2,28 @@ package com.xstudio.plugin.idea.sj.swagger;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.javadoc.PsiDocComment;
-import com.xstudio.plugin.idea.sj.translate.BiyingTranslate;
 import com.xstudio.plugin.idea.sj.util.PsiUtil;
 
-public class GenerateSwaggerAnnotationAction extends AnAction {
+/**
+ * @author beeant
+ */
+public abstract class AbstractGenerateSwaggerAnnotationAction extends AnAction {
     private PsiElementFactory elementFactory;
+
+    public PsiElementFactory getElementFactory() {
+        return elementFactory;
+    }
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        Editor editor = LangDataKeys.EDITOR.getData(e.getDataContext());
+        Editor editor = CommonDataKeys.EDITOR.getData(e.getDataContext());
         assert editor != null;
         int startPosition = editor.getSelectionModel().getSelectionStart();
 
@@ -51,45 +58,63 @@ public class GenerateSwaggerAnnotationAction extends AnAction {
             WriteCommandAction.writeCommandAction(project, file)
                     .withGlobalUndo()
                     .run(() -> addClassAnnotation((PsiClass) element));
+        } else if (element instanceof PsiField) {
+            WriteCommandAction.writeCommandAction(project, file)
+                    .withGlobalUndo()
+                    .run(() -> addFieldAnnotation((PsiField) element));
         }
     }
 
-    private void addParameterAnnotation(PsiParameter parameter) {
-        String sb = "@ApiParam(value = \"" +
-                BiyingTranslate.translate(parameter.getName()) +
-                "\", required = true) \n";
-        PsiAnnotation psiAnnotation = elementFactory.createAnnotationFromText(sb, parameter);
-        parameter.addBefore(psiAnnotation, parameter.getFirstChild());
+    /**
+     * add field annotation
+     *
+     * @param psiField parameter
+     */
+    public abstract void addFieldAnnotation(PsiField psiField);
+
+    /**
+     * add parameter annotation
+     *
+     * @param psiParameter parameter
+     */
+    public abstract void addParameterAnnotation(PsiParameter psiParameter);
+
+    /**
+     * add method annotation
+     *
+     * @param psiMethod psiMethod
+     */
+    public abstract void addMethodAnnotation(PsiMethod psiMethod);
+
+    /**
+     * add class annotation
+     *
+     * @param psiClass psiClass
+     */
+    public abstract void addClassAnnotation(PsiClass psiClass);
+
+
+    public void addAnnotation(PsiElement psiElement, String annotationText) {
+
+        Project project = psiElement.getProject();
+
+        PsiAnnotation psiAnnotation = getElementFactory().createAnnotationFromText(annotationText, psiElement);
+        psiElement.addBefore(psiAnnotation, getInsertBeforeElement(psiElement));
+
+        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+        codeStyleManager.reformat(psiElement);
+
     }
 
-    private void addMethodAnnotation(PsiMethod psiMethod) {
-        String description = PsiUtil.getDescription(psiMethod);
-        if (null == description) {
-            description = BiyingTranslate.translate(psiMethod.getName());
+    public PsiElement getInsertBeforeElement(PsiElement element) {
+        PsiElement psiElement = element.getFirstChild();
+        for (PsiElement child : element.getChildren()) {
+            if (!(child instanceof PsiDocComment)) {
+                psiElement = child;
+                break;
+            }
         }
 
-        String sb = "@ApiOperation(value = \"" + description + "\", notes = \"\")";
-        PsiAnnotation psiAnnotation = elementFactory.createAnnotationFromText(sb, psiMethod);
-        PsiDocComment docComment = psiMethod.getDocComment();
-        if (null != docComment) {
-            psiMethod.addAfter(psiAnnotation, docComment);
-        } else {
-            psiMethod.addBefore(psiAnnotation, psiMethod.getFirstChild());
-        }
-    }
-
-    private void addClassAnnotation(PsiClass psiClass) {
-        String description = PsiUtil.getDescription(psiClass);
-        if (null == description) {
-            description = BiyingTranslate.translate(psiClass.getName());
-        }
-        String sb = "@Api(tags = \"" + description + "\")";
-        PsiAnnotation psiAnnotation = elementFactory.createAnnotationFromText(sb, psiClass);
-        PsiDocComment docComment = psiClass.getDocComment();
-        if (null != docComment) {
-            psiClass.addAfter(psiAnnotation, docComment);
-        } else {
-            psiClass.addBefore(psiAnnotation, psiClass.getFirstChild());
-        }
+        return psiElement;
     }
 }
