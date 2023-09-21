@@ -109,8 +109,7 @@ public class SerializeGeneratorHandler implements CodeInsightActionHandler {
             PsiExpression initializer = field.getInitializer();
             int sign = 1;
 
-            if (initializer instanceof PsiPrefixExpression) {
-                final PsiPrefixExpression prefixExpression = (PsiPrefixExpression) initializer;
+            if (initializer instanceof PsiPrefixExpression prefixExpression) {
 
                 if (prefixExpression.getOperationSign().getTokenType() == JavaTokenType.MINUS) {
                     sign = -1;
@@ -139,20 +138,19 @@ public class SerializeGeneratorHandler implements CodeInsightActionHandler {
         final PsiElementFactory psiElementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
         final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
 
-        if (psiElementFactory != null && codeStyleManager != null) {
+        if (codeStyleManager != null) {
             try {
                 final String fullDeclaration = getFullDeclaration(extension, serial);
+                assert fullDeclaration != null;
                 final PsiField psiField = psiElementFactory.createFieldFromText(fullDeclaration, null);
 
-                if (psiField != null) {
-                    final PsiField oldPsiField = getUIDField(psiClass);
+                final PsiField oldPsiField = getUIDField(psiClass);
 
-                    codeStyleManager.reformat(psiField);
-                    if (oldPsiField != null) {
-                        oldPsiField.replace(psiField);
-                    } else {
-                        psiClass.add(psiField);
-                    }
+                codeStyleManager.reformat(psiField);
+                if (oldPsiField != null) {
+                    oldPsiField.replace(psiField);
+                } else {
+                    psiClass.add(psiField);
                 }
             } catch (IncorrectOperationException e) {
                 e.printStackTrace();
@@ -178,19 +176,14 @@ public class SerializeGeneratorHandler implements CodeInsightActionHandler {
         }
     }
 
-    @Override
-    public boolean startInWriteAction() {
-        return true;
-    }
-
     @SuppressWarnings("UnusedDeclaration")
     public enum Language {
         JAVA("java", "private static final long serialVersionUID = {0}L;"),
         GROOVY("groovy", "private static final serialVersionUID = {0}L"),
         SCALA("scala", "private val serialVersionUID = {0}L");
 
-        private String fileExtension;
-        private MessageFormat format;
+        private final String fileExtension;
+        private final MessageFormat format;
 
         private Language(@NotNull String fileExtension, @NotNull String format) {
             this.fileExtension = fileExtension;

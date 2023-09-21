@@ -1,5 +1,6 @@
 package com.xstudio.plugin.idea.sj.getset;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
@@ -18,7 +19,7 @@ public class TemplatePersistentConfiguration implements PersistentStateComponent
     }
 
     public static TemplatePersistentConfiguration getInstance() {
-        return ServiceManager.getService(TemplatePersistentConfiguration.class);
+        return ApplicationManager.getApplication().getService(TemplatePersistentConfiguration.class);
     }
 
     @Override

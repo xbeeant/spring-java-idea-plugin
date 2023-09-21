@@ -29,16 +29,11 @@ public class RequestUtil {
             paramsList.add(new BasicNameValuePair(key, value));
         }
         httpPost.setEntity(new UrlEncodedFormEntity(paramsList, "UTF-8"));
-        CloseableHttpResponse httpResponse = httpClient.execute(httpPost);
-        try {
+        try (CloseableHttpResponse httpResponse = httpClient.execute(httpPost)) {
             HttpEntity httpEntity = httpResponse.getEntity();
             String json = EntityUtils.toString(httpEntity, "UTF-8");
             EntityUtils.consume(httpEntity);
             return json;
-        } finally {
-            if (httpResponse != null) {
-                httpResponse.close();
-            }
         }
     }
 }

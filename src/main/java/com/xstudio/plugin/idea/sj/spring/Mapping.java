@@ -8,13 +8,13 @@ import com.intellij.psi.PsiMethod;
  * @version 2020/5/2
  */
 public class Mapping {
-    private String path;
+    private final String path;
 
-    private String type;
+    private final String type;
 
-    private PsiMethod psiMethod;
+    private final PsiMethod psiMethod;
 
-    private String moduleName;
+    private final String moduleName;
 
     public Mapping(String controllerPath, String methodPath, String type, PsiMethod psiMethod, String moduleName) {
         String prePath = controllerPath;
@@ -23,7 +23,7 @@ public class Mapping {
         }
 
         String path = methodPath;
-        if (!methodPath.startsWith("/") && !"".equals(path)) {
+        if (!methodPath.startsWith("/") && !path.isEmpty()) {
             path = "/" + methodPath;
         }
 

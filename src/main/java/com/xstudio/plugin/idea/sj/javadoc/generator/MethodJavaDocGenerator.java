@@ -40,8 +40,7 @@ public class MethodJavaDocGenerator extends AbstractJavaDocGenerator<PsiMethod> 
         }
         // doc for return
         PsiType resultType = element.getReturnType();
-        if (resultType instanceof PsiClassReferenceType) {
-            PsiClassReferenceType psiClassReferenceType = (PsiClassReferenceType) resultType;
+        if (resultType instanceof PsiClassReferenceType psiClassReferenceType) {
             String returnClass = psiClassReferenceType.getClassName();
             javaDoc.setRturn(returnClass);
 
@@ -54,6 +53,7 @@ public class MethodJavaDocGenerator extends AbstractJavaDocGenerator<PsiMethod> 
             }
         } else {
             PsiPrimitiveType psiPrimitiveType = (PsiPrimitiveType) resultType;
+            assert psiPrimitiveType != null;
             if(!"void".equals(psiPrimitiveType.getName())) {
                 javaDoc.setRturn(psiPrimitiveType.getName());
             }

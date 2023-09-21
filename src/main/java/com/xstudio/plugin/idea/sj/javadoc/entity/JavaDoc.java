@@ -9,10 +9,10 @@ import java.util.List;
 public class JavaDoc {
     private String description = "";
 
-    private List<Param> params = new ArrayList<>();
+    private final List<Param> params = new ArrayList<>();
     private String rturn;
-    private List<String> sees = new ArrayList<>();
-    private List<Throws> throwz = new ArrayList<>();
+    private final List<String> sees = new ArrayList<>();
+    private final List<Throws> throwz = new ArrayList<>();
 
     /**
      * 设置 description.
@@ -88,7 +88,7 @@ public class JavaDoc {
     public static class Param {
         private String description;
 
-        private String name;
+        private final String name;
 
         public Param(String name, String link) {
             this.name = name;
@@ -109,7 +109,7 @@ public class JavaDoc {
     }
 
     public static class Throws {
-        private String name;
+        private final String name;
 
         public Throws(String name) {
             this.name = name;
@@ -117,12 +117,10 @@ public class JavaDoc {
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append("* @throws ");
-            sb.append(name);
-            sb.append(" ");
-            sb.append(BiyingTranslate.translate(JavaBeansUtil.humpToSpace(name)));
-            return sb.toString();
+            return "* @throws " +
+                    name +
+                    " " +
+                    BiyingTranslate.translate(JavaBeansUtil.humpToSpace(name));
         }
     }
 }

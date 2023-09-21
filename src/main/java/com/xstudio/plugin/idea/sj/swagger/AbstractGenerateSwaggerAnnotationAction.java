@@ -36,8 +36,7 @@ public abstract class AbstractGenerateSwaggerAnnotationAction extends AnAction {
         final PsiFile file = psiClass.getContainingFile();
 
         PsiElement element = PsiUtil.getJavaElement(PsiUtil.getPsiElement(file, startPosition));
-        if (element instanceof PsiMethod) {
-            PsiMethod psiMethod = (PsiMethod) element;
+        if (element instanceof PsiMethod psiMethod) {
             PsiParameterList parameterList = psiMethod.getParameterList();
             PsiParameter[] parameters = parameterList.getParameters();
             for (PsiParameter parameter : parameters) {

@@ -1,10 +1,12 @@
 package com.xstudio.plugin.idea.sj.spring.components;
 
 import com.intellij.notification.*;
+import com.intellij.notification.impl.NotificationGroupEP;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBList;
 import com.xstudio.plugin.idea.sj.spring.Mapping;
 import com.xstudio.plugin.idea.sj.spring.MappingHelper;
+import com.xstudio.plugin.idea.sj.util.PluginNotifier;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,11 +49,7 @@ public class MappingListForm {
                     clipboard.setContents(trans, null);
 
                     // 提示框
-                    NotificationGroup balloonNotifications = new NotificationGroup("RequestList", NotificationDisplayType.TOOL_WINDOW, false);
-                    Notification notification = balloonNotifications.createNotification("Copyed", mapping.getPath(),
-                            NotificationType.INFORMATION, (notification1, hyperlinkEvent) -> {
-                            });
-                    Notifications.Bus.notify(notification);
+                    PluginNotifier.notify(project, "Copyed", mapping.getPath());
                 }
             }
         });

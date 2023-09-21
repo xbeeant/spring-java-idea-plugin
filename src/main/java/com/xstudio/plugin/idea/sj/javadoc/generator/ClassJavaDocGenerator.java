@@ -24,6 +24,7 @@ public class ClassJavaDocGenerator extends AbstractJavaDocGenerator<PsiClass> {
 
         String description = PsiUtil.getDescription(element);
         if (null == description) {
+            assert name != null;
             if (name.startsWith("I")) {
                 name = name.substring(1);
             }

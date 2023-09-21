@@ -54,6 +54,7 @@ public class JavadocGenerateAction extends AnAction {
             JavaDocGenerator generator = getGenerator(element);
             if (null != generator) {
                 PsiComment docComment = generator.generate(psiClass, element);
+                assert docComment != null;
                 element.addBefore(docComment, element.getFirstChild());
             }
         }

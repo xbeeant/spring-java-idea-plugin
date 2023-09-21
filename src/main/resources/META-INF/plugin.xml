@@ -24,7 +24,7 @@
     ]]>
     </description>
 
-    <idea-version since-build="201.*.*"/>
+    <idea-version since-build="222.3345.118"/>
     <change-notes>
         <![CDATA[
         1.0.17:
@@ -42,6 +42,9 @@
     <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup id="SJ Notification Group"
+                           displayType="BALLOON"
+                           key="com.xstudio.plugin.idea.sj"/>
         <applicationService
                 serviceImplementation="com.xstudio.plugin.idea.sj.getset.TemplatePersistentConfiguration"/>
         <applicationConfigurable groupId="tools" displayName="Getter Setter Template" id="Xstudio.Plugin.SpringJava"

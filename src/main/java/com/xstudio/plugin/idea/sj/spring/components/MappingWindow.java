@@ -40,7 +40,7 @@ public class MappingWindow implements ToolWindowFactory {
             @Override
             public void run() {
                 if (project.isInitialized()) {
-                    ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+                    ContentFactory contentFactory = ContentFactory.getInstance();
                     // 获取请求列表panel
                     MappingListForm mappingListForm = MappingHelper.getMappingListForm(project);
 
@@ -70,8 +70,7 @@ public class MappingWindow implements ToolWindowFactory {
 
                     // 自定义list渲染器
                     jbList.setCellRenderer((ListCellRenderer<? super Mapping>) (list, value, index, isSelected, cellHasFocus) -> {
-                        Mapping mapping = value;
-                        JLabel jLabel = new JLabel(mapping.getType() + " " + mapping.getPath());
+                        JLabel jLabel = new JLabel(value.getType() + " " + value.getPath());
                         if (cellHasFocus || isSelected) {
                             jLabel.setBackground(JBColor.LIGHT_GRAY);
                             jLabel.setOpaque(true);

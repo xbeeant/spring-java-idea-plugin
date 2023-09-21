@@ -126,7 +126,7 @@ public class PsiUtil {
             dialog.selectElements(psiMethodMembers);
             dialog.show();
             if (MemberChooser.OK_EXIT_CODE == dialog.getExitCode()) {
-                List<PsiField> selectedFields = PsiUtil.toPsiFields(dialog.getSelectedElements());
+                List<PsiField> selectedFields = PsiUtil.toPsiFields(Objects.requireNonNull(dialog.getSelectedElements()));
                 WriteCommandAction.writeCommandAction(project, file)
                         .withGlobalUndo()
                         .run(() -> createGetSet(psiClass, selectedFields,
@@ -211,7 +211,7 @@ public class PsiUtil {
             sb.append(doc);
         }
         sb.append("public ");
-        if ((Objects.requireNonNull(field.getModifierList())).hasModifierProperty("static")) {
+        if ((Objects.requireNonNull(field.getModifierList())).hasModifierProperty(PsiModifier.STATIC)) {
             sb.append("static ");
         }
         sb.append(field.getType().getPresentableText()).append(" ");
@@ -240,7 +240,7 @@ public class PsiUtil {
             sb.append(doc);
         }
         sb.append("public ");
-        if (field.getModifierList().hasModifierProperty("static")) {
+        if (field.getModifierList().hasModifierProperty(PsiModifier.STATIC)) {
             sb.append("static ");
         }
         sb.append("void ");
@@ -265,6 +265,7 @@ public class PsiUtil {
             }
         }
         if ("get".equals(string)) {
+            assert oldContent != null;
             oldContent = template.getGetter().toLowerCase()
                     .replaceAll("\\$\\{field_comment}", oldContent)
                     .replaceAll("\\$\\{user}", System.getProperties().getProperty("user.name"))
@@ -272,6 +273,7 @@ public class PsiUtil {
                     .replaceAll("\\$\\{time}", dateTime.format(currentDate))
                     .replaceAll("\\$\\{field_name}", field.getName());
         } else if ("set".equals(string)) {
+            assert oldContent != null;
             oldContent = template.getSetter().toLowerCase()
                     .replaceAll("\\$\\{field_comment}", oldContent)
                     .replaceAll("\\$\\{user}", System.getProperties().getProperty("user.name"))

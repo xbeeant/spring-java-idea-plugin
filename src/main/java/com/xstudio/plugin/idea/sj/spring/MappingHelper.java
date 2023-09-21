@@ -10,7 +10,6 @@ import com.intellij.psi.impl.source.tree.java.PsiArrayInitializerMemberValueImpl
 import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.xstudio.plugin.idea.sj.spring.components.MappingListForm;
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.swing.*;
@@ -176,7 +175,7 @@ public class MappingHelper {
                 PsiAnnotation annotation = psiMethod.getAnnotation(restMapping.getQualifiedName());
                 if (null != annotation) {
                     String path = getScheduleMappingPath(annotation, restMapping);
-                    if (!"".equals(path)) {
+                    if (!path.isEmpty()) {
                         mappings.add(new Mapping(path, "schedule", psiMethod, module.getName()));
                     }
                 }
@@ -325,8 +324,7 @@ public class MappingHelper {
                         Field myElement = clazz.getSuperclass().getDeclaredField("myElement");
                         myElement.setAccessible(true);
                         Object elObj = myElement.get(value);
-                        if (elObj instanceof PsiExpression) {
-                            PsiExpression expression = (PsiExpression) elObj;
+                        if (elObj instanceof PsiExpression expression) {
                             list.add(expression.getText());
                         }
                     } catch (Exception ignore) {
