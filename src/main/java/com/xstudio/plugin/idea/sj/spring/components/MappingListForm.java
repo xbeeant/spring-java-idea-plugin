@@ -49,7 +49,7 @@ public class MappingListForm {
                     clipboard.setContents(trans, null);
 
                     // 提示框
-                    PluginNotifier.notify(project, "Copyed", mapping.getPath());
+                    PluginNotifier.notify(project, "Copied", mapping.getPath());
                 }
             }
         });

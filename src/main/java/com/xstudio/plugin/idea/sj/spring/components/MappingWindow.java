@@ -34,6 +34,10 @@ public class MappingWindow implements ToolWindowFactory {
         return found;
     }
 
+    private String formatLabel(String method, String uri) {
+        return String.format("%-10s%s", method, uri);
+    }
+
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         StartupManager.getInstance(project).runWhenProjectIsInitialized(new Runnable() {
@@ -70,7 +74,7 @@ public class MappingWindow implements ToolWindowFactory {
 
                     // 自定义list渲染器
                     jbList.setCellRenderer((ListCellRenderer<? super Mapping>) (list, value, index, isSelected, cellHasFocus) -> {
-                        JLabel jLabel = new JLabel(value.getType() + " " + value.getPath());
+                        JLabel jLabel = new JLabel(formatLabel(value.getType(), value.getPath()));
                         if (cellHasFocus || isSelected) {
                             jLabel.setBackground(JBColor.LIGHT_GRAY);
                             jLabel.setOpaque(true);
