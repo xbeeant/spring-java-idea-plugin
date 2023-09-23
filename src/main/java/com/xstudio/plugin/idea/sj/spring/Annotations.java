@@ -23,12 +23,12 @@ public class Annotations {
 
     private static final List<RestMapping> REST_METHODS = new ArrayList<>() {
         {
-            add(new RestMapping("request ", "RequestMapping", "org.springframework.web.bind.annotation.RequestMapping"));
-            add(new RestMapping("delete  ", "DeleteMapping", "org.springframework.web.bind.annotation.DeleteMapping"));
-            add(new RestMapping("get     ", "GetMapping", "org.springframework.web.bind.annotation.GetMapping"));
-            add(new RestMapping("post    ", "PostMapping", "org.springframework.web.bind.annotation.PostMapping"));
-            add(new RestMapping("put     ", "PutMapping", "org.springframework.web.bind.annotation.PutMapping"));
-            add(new RestMapping("patch   ", "PatchMapping", "org.springframework.web.bind.annotation.PatchMapping"));
+            add(new RestMapping("request", "RequestMapping", "org.springframework.web.bind.annotation.RequestMapping"));
+            add(new RestMapping("delete", "DeleteMapping", "org.springframework.web.bind.annotation.DeleteMapping"));
+            add(new RestMapping("get", "GetMapping", "org.springframework.web.bind.annotation.GetMapping"));
+            add(new RestMapping("post", "PostMapping", "org.springframework.web.bind.annotation.PostMapping"));
+            add(new RestMapping("put", "PutMapping", "org.springframework.web.bind.annotation.PutMapping"));
+            add(new RestMapping("patch", "PatchMapping", "org.springframework.web.bind.annotation.PatchMapping"));
         }
     };
 

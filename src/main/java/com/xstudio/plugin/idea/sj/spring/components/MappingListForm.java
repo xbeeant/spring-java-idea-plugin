@@ -1,7 +1,5 @@
 package com.xstudio.plugin.idea.sj.spring.components;
 
-import com.intellij.notification.*;
-import com.intellij.notification.impl.NotificationGroupEP;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBList;
 import com.xstudio.plugin.idea.sj.spring.Mapping;
@@ -15,8 +13,9 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MappingListForm {
     private JTextField requestSearch;
@@ -24,15 +23,18 @@ public class MappingListForm {
     private JBList<Mapping> jbList;
     private JPanel panel;
     private JButton reloadBtn;
+    private JCheckBox getCheckBox;
+    private JCheckBox scheduleCheckBox;
+    private JCheckBox postCheckBox;
+    private JCheckBox putCheckBox;
+    private JCheckBox deleteCheckBox;
+    private JCheckBox requestCheckBox;
+
+    public JButton getReloadBtn() {
+        return reloadBtn;
+    }
 
     public MappingListForm(Project project) {
-        reloadBtn.addActionListener(e -> {
-
-            List<Mapping> mappings = MappingHelper.findAllMapping(project);
-
-            MappingListForm mappingListForm = MappingHelper.getMappingListForm(project);
-            mappingListForm.getJbList().setModel(MappingHelper.getListModel(mappings));
-        });
         jbList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -69,5 +71,63 @@ public class MappingListForm {
 
     public JPanel getPanel() {
         return panel;
+    }
+
+    public JCheckBox getGetCheckBox() {
+        return getCheckBox;
+    }
+
+    public JCheckBox getScheduleCheckBox() {
+        return scheduleCheckBox;
+    }
+
+    public JCheckBox getPostCheckBox() {
+        return postCheckBox;
+    }
+
+    public JCheckBox getPutCheckBox() {
+        return putCheckBox;
+    }
+
+    public JCheckBox getDeleteCheckBox() {
+        return deleteCheckBox;
+    }
+
+    public JCheckBox getRequestCheckBox() {
+        return requestCheckBox;
+    }
+
+    public enum CheckboxFilterEnum {
+        GET,
+        POST,
+        PUT,
+        DELETE,
+        REQUEST,
+        SCHEDULE,
+    }
+
+
+
+
+
+    public static class CheckboxFilter {
+        private static final Map<CheckboxFilterEnum, Boolean> filters = new HashMap<>();
+
+        static {
+            filters.put(CheckboxFilterEnum.PUT, true);
+            filters.put(CheckboxFilterEnum.POST, true);
+            filters.put(CheckboxFilterEnum.GET, true);
+            filters.put(CheckboxFilterEnum.DELETE, true);
+            filters.put(CheckboxFilterEnum.REQUEST, true);
+            filters.put(CheckboxFilterEnum.SCHEDULE, true);
+        }
+
+        public static Map<CheckboxFilterEnum, Boolean> getFilters() {
+            return filters;
+        }
+
+        public static void setFilter(CheckboxFilterEnum type, Boolean value) {
+            filters.put(type, value);
+        }
     }
 }

@@ -410,6 +410,7 @@ public class MappingHelper {
         List<Mapping> mappings = new ArrayList<>();
         // 获取所有rest请求
         List<Mapping> restMappings = MappingHelper.findAllRestMapping(project);
+
         List<Mapping> scheduleMappings = MappingHelper.findAllScheduleMapping(project);
         mappings.addAll(restMappings);
         mappings.addAll(scheduleMappings);
