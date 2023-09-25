@@ -72,6 +72,34 @@ public class MappingHelper {
         return mappings;
     }
 
+//    private static List<Mapping> findAllDubboProvider(Project project, Module module) {
+//        GlobalSearchScope moduleScope = GlobalSearchScope.moduleScope(module);
+//
+//        List<String> annotations = Annotations.getDubboProviderAnnotation();
+//        List<Mapping> mappings = new ArrayList<>();
+//        for (String annotation : annotations) {
+//            Collection<PsiAnnotation> psiAnnotations = JavaAnnotationIndex.getInstance().get(annotation, project, moduleScope);
+//            List<Mapping> paths = getDubboProvider(psiAnnotations, module);
+//            mappings.addAll(paths);
+//        }
+//
+//        return mappings;
+//    }
+
+    private static List<Mapping> getDubboProvider(Collection<PsiAnnotation> psiAnnotations, Module module) {
+        List<Mapping> mappings = new ArrayList<>();
+        for (PsiAnnotation psiAnnotation : psiAnnotations) {
+            PsiModifierList psiModifierList = (PsiModifierList) psiAnnotation.getParent();
+            PsiElement psiElement = psiModifierList.getParent();
+
+            PsiClass psiClass = (PsiClass) psiElement;
+
+//            mappings.addAll(getRequestPaths(psiClass, module, new ArrayList<>()));
+        }
+
+        return mappings;
+    }
+
     /**
      * find all request in module
      *
@@ -83,13 +111,15 @@ public class MappingHelper {
      */
     private static List<Mapping> findAllRestMapping(Project project, Module module) {
         GlobalSearchScope moduleScope = GlobalSearchScope.moduleScope(module);
-        // search all spring @RestController annotation in module
-        Collection<PsiAnnotation> psiAnnotations = JavaAnnotationIndex.getInstance().get("RestController", project, moduleScope);
-        List<Mapping> mappings = getRequestPaths(psiAnnotations, module);
 
-        // search all spring @Controller annotation in module
-        psiAnnotations = JavaAnnotationIndex.getInstance().get("Controller", project, moduleScope);
-        mappings.addAll(getRequestPaths(psiAnnotations, module));
+        List<String> annotations = Annotations.getRestAnnotation();
+        List<Mapping> mappings = new ArrayList<>();
+        for (String annotation : annotations) {
+            Collection<PsiAnnotation> psiAnnotations = JavaAnnotationIndex.getInstance().get(annotation, project, moduleScope);
+            List<Mapping> paths = getRequestPaths(psiAnnotations, module);
+            mappings.addAll(paths);
+        }
+
         return mappings;
     }
 
@@ -412,9 +442,25 @@ public class MappingHelper {
         List<Mapping> restMappings = MappingHelper.findAllRestMapping(project);
 
         List<Mapping> scheduleMappings = MappingHelper.findAllScheduleMapping(project);
+
+//        List<Mapping> dubboService = MappingHelper.findAllDubboProvider(project);
         mappings.addAll(restMappings);
         mappings.addAll(scheduleMappings);
 
         return mappings;
     }
+
+//    private static List<Mapping> findAllDubboProvider(Project project) {
+//        List<Mapping> mappings = new ArrayList<>();
+//        ModuleManager moduleManager = ModuleManager.getInstance(project);
+//
+//        Module[] modules = moduleManager.getSortedModules();
+//        // 获取 request list
+//        for (Module module : modules) {
+//            mappings.addAll(findAllDubboProvider(project, module));
+//        }
+//        return mappings;
+//
+//
+//    }
 }

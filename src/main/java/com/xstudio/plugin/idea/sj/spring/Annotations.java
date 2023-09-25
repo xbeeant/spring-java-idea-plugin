@@ -21,6 +21,20 @@ public class Annotations {
         }
     };
 
+    private static final List<String> REST_ANNOTATION = new ArrayList<>() {
+        {
+            add("RestController");
+            add("Controller");
+        }
+    };
+
+//    private static final List<String> DUBBO_PROVIDER_ANNOTATION = new ArrayList<>() {
+//        {
+//            add("Service");
+//        }
+//    };
+
+
     private static final List<RestMapping> REST_METHODS = new ArrayList<>() {
         {
             add(new RestMapping("request", "RequestMapping", "org.springframework.web.bind.annotation.RequestMapping"));
@@ -53,4 +67,13 @@ public class Annotations {
     public static List<String> getScheduleScanAnnotation() {
         return SCHEDULE_SCAN_ANNOTATION;
     }
+
+//    public static List<String> getDubboProviderAnnotation() {
+//        return DUBBO_PROVIDER_ANNOTATION;
+//    }
+
+    public static List<String> getRestAnnotation() {
+        return REST_ANNOTATION;
+    }
+
 }
