@@ -24,3 +24,8 @@ Usage: ALT + Enter
 
 [gen-javadoc](https://github.com/bpark/gen-javadoc)
 
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=xbeeant/spring-java-idea-plugin&type=Date)](https://star-history.com/#xbeeant/spring-java-idea-plugin&Date)
+
